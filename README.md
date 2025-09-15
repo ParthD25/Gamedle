@@ -35,5 +35,5 @@ Players can:
 - **Armaan Dhaliwal:** Web Design, Frontend/Backend Design, Presentation  
 - **Harrison Heiser:** Game Design, Backend (API, SQL)  
 - **Ivan Diaz:** UI Design, Frontend, Website Development  
-- **Parth Dave:** Database, SQL, Backend Management, Website Management  
+- **Parth Dave:** Database, API,SQL, Backend Management, Website Management  
 
