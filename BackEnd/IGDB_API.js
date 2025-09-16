@@ -25,9 +25,6 @@ const PostForTwitchAuthToken = async () => {
             console.log(`HTTP ERROR ${res.status}`)
         }
         const data = await res.json()
-        console.log(`Twitch Token: ${data.access_token}`)
-        console.log(`Expires In: ${data.expires_in}`)
-        console.log(`Token Type: ${data.token_type}`)
         return data
     } catch(error){
         console.error('Error (PostForTwitchAuthToken) while fetching Twitch Token', error)
@@ -36,7 +33,7 @@ const PostForTwitchAuthToken = async () => {
 //Call IGDB api endpoint (POST)
 const IGDB_URL = `https://api.igdb.com/v4/games`
 const query = `fields id, name, first_release_date, genres.name, 
-    involved_companies.company.name, aggregated_rating; where category = 0; limit 1;`
+    involved_companies.company.name, aggregated_rating; where category = 0; limit 500;`
 
 const fetchAllGamesData = async (token, offset) =>{
     try{
@@ -55,6 +52,7 @@ const fetchAllGamesData = async (token, offset) =>{
 
         const data = await res.json()
         saveGamesToFile(data)
+        return data
     } catch(err){
         console.error('Error with fetch request', err)
     }
@@ -78,9 +76,11 @@ const saveGamesToFile = (games) =>{
     fs.writeFileSync('./GamesData.json', gamesAsJSON, 'utf-8')
 }
 
+//Fetches Games data from IGDB and saves to GamesData.json. (This is for only main games)
 const twitchToken = await PostForTwitchAuthToken()
-
-
-for(let offset = 0; offset<5; offset++){
-    await fetchAllGamesData(twitchToken.access_token, offset)
-}
+let returnedData = {}
+let offset = 0
+do{
+    returnedData = await fetchAllGamesData(twitchToken.access_token, offset)
+    offset+=500
+}while(returnedData.length > 0)
