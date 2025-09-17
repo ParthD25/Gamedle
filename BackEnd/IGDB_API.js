@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import fs, { access } from 'fs'
+import fs from 'fs'
 
 const URL = 'https://id.twitch.tv/oauth2/token'
 dotenv.config()
