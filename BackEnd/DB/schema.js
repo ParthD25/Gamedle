@@ -1,119 +1,145 @@
-import sqlite3 from 'sqlite3';
-import path from 'path';
-import { fileURLToPath } from 'url';
+/*
+ * Database Schema Setup Script
+ * 
+ * This script creates SQLite database tables for the Gamedle application
+ * 
+ * Primary Sources:
+ * SQLite Tutorial. "SQLite Node.js: Connecting to SQLite Database." 
+ * SQLite Tutorial, https://www.sqlitetutorial.net/sqlite-nodejs/connect/. 
+ * Accessed 22 Sept. 2025.
+ * 
+ * SQLite Tutorial. "SQLite Node.js: Creating Tables." 
+ * SQLite Tutorial, https://www.sqlitetutorial.net/sqlite-nodejs/create-tables/. 
+ * Accessed 22 Sept. 2025.
+ */
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import sqlite3 from 'sqlite3'
 
-const sql3 = sqlite3.verbose();
+const sql3 = sqlite3.verbose ()
 
-// Use the existing games.db or create new one
-const dbPath = path.join(__dirname, 'games.db');
-const DB = new sql3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+// Create database connection
+// Source: SQLite Tutorial. "SQLite Node.js: Connecting to SQLite Database." 
+// SQLite Tutorial, https://www.sqlitetutorial.net/sqlite-nodejs/connect/. 
+// Accessed 22 Sept. 2025.
+const DB = new sql3.Database('./games.db', (err) => 
+    {
     if (err) {
-        console.error('Error connecting to database:', err.message);
-        return;
+        console.log('Error connecting to database:', err)
+        return
     }
-    console.log('Connected to SQLite database for schema setup.');
-});
+    console.log('Connected to database')
+})
 
-// Enable foreign keys
-DB.run('PRAGMA foreign_keys = ON');
+// Create tables
+function createTables() {
+    // Games table
+    // Source: SQLite Tutorial. "SQLite Node.js: Creating Tables." 
+    // SQLite Tutorial, https://www.sqlitetutorial.net/sqlite-nodejs/create-tables/. 
+    // Accessed 22 Sept. 2025.
+    let sql = `CREATE TABLE IF NOT EXISTS games (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        release_date INTEGER,
+        rating REAL
+    )`
+    
+    DB.run(sql, [], (err) => {
+        if (err) {
+            console.log('Error creating games table:', err)
+            return
+        }
+        console.log('Games table created')
+    } )
 
-const createTablesSQL = `
--- Games table (main table)
-CREATE TABLE IF NOT EXISTS games (
-    id INTEGER PRIMARY KEY,
-    name TEXT NOT NULL,
-    first_release_date INTEGER,
-    rating REAL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+    // Genres table
+    sql = `CREATE TABLE IF NOT EXISTS genres (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL
+    )`
+    
+    DB.run(sql, [], (err) => {
+        if (err) {
+            console.log('Error creating genres table:', err)
+            return
+        }
+        console.log('Genres table hhas been created')
+    } )
 
--- Genres table
-CREATE TABLE IF NOT EXISTS genres (
-    id INTEGER PRIMARY KEY,
-    name TEXT UNIQUE NOT NULL
-);
+    // Companies table
+    sql = `CREATE TABLE IF NOT EXISTS companies (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL
+    )`
+    
+    DB.run(sql, [], (err) => {
+        if (err) {
+            console.log('Error while creating companies table:', err)
+            return
+        }
+        console.log('Companies table created')
+    }  )
 
--- Companies table  
-CREATE TABLE IF NOT EXISTS companies (
-    id INTEGER PRIMARY KEY,
-    name TEXT UNIQUE NOT NULL
-);
+    // Platforms table
+    sql = `CREATE TABLE IF NOT EXISTS platforms (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL
+    )`
+    
+    DB.run(sql, [], (err) => {
+        if (err) {
+            console.log('Error has occured while creating the platforms table:', err)
+            return
+        }
+        console.log('Platforms table created')
+    } )
 
--- Platforms table
-CREATE TABLE IF NOT EXISTS platforms (
-    id INTEGER PRIMARY KEY,
-    name TEXT UNIQUE NOT NULL
-);
+    // Game genres relationship
+    sql = `CREATE TABLE IF NOT EXISTS game_genres (
+        game_id INTEGER,
+        genre_id INTEGER
+    )`
+    
+    DB.run(sql, [], (err) => 
+        {
+        if (err) {
+            console.log('Error creating game_genres table:', err)
+            return
+        }
+        console.log('Game genres table created')
+    })
 
--- Junction tables for many-to-many relationships
+    // Game companies relationship
+    sql = `CREATE TABLE IF NOT EXISTS game_companies (
+        game_id INTEGER,
+        company_id INTEGER
+    )`
+    
+    DB.run(sql, [], (err) => 
+        {
+        if (err) {
+            console.log('Error has occured while creating game_companies table:', err)
+            return
+        }
+        console.log('Game companies table created')
+    } )
 
--- Game-Genre relationship
-CREATE TABLE IF NOT EXISTS game_genres (
-    game_id INTEGER,
-    genre_id INTEGER,
-    PRIMARY KEY (game_id, genre_id),
-    FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE,
-    FOREIGN KEY (genre_id) REFERENCES genres(id) ON DELETE CASCADE
-);
-
--- Game-Company relationship
-CREATE TABLE IF NOT EXISTS game_companies (
-    game_id INTEGER,
-    company_id INTEGER,
-    PRIMARY KEY (game_id, company_id),
-    FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE,
-    FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
-);
-
--- Game-Platform relationship
-CREATE TABLE IF NOT EXISTS game_platforms (
-    game_id INTEGER,
-    platform_id INTEGER,
-    PRIMARY KEY (game_id, platform_id),
-    FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE,
-    FOREIGN KEY (platform_id) REFERENCES platforms(id) ON DELETE CASCADE
-);
-
--- Create indexes for better performance
-CREATE INDEX IF NOT EXISTS idx_games_name ON games(name);
-CREATE INDEX IF NOT EXISTS idx_games_rating ON games(rating);
-CREATE INDEX IF NOT EXISTS idx_games_release_date ON games(first_release_date);
-CREATE INDEX IF NOT EXISTS idx_genres_name ON genres(name);
-CREATE INDEX IF NOT EXISTS idx_companies_name ON companies(name);
-CREATE INDEX IF NOT EXISTS idx_platforms_name ON platforms(name);
-`;
-
-export function createDatabaseSchema() {
-    return new Promise((resolve, reject) => {
-        DB.exec(createTablesSQL, (err) => {
-            if (err) {
-                console.error('Error creating database schema:', err.message);
-                reject(err);
-                return;
-            }
-            console.log('Database schema created successfully.');
-            resolve();
-        });
-    });
+    // Game platforms relationship
+    sql = `CREATE TABLE IF NOT EXISTS game_platforms (
+        game_id INTEGER,
+        platform_id INTEGER
+    )`
+    
+    DB.run(sql, [], (err) => 
+        {
+        if (err) {
+            console.log('Error creating game_platforms table:', err)
+            return
+        }
+        console.log('Game platforms table created')
+    })
 }
 
-export function getDatabase() {
-    return DB;
-}
+// Run the function to create tables
+createTables()
 
-// If run directly, create the schema
-if (import.meta.url === `file://${process.argv[1]}`) {
-    createDatabaseSchema()
-        .then(() => {
-            console.log('Schema setup complete.');
-            DB.close();
-        })
-        .catch((err) => {
-            console.error('Schema setup failed:', err);
-            DB.close();
-            process.exit(1);
-        });
-}
+export { DB }
