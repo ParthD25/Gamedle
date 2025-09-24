@@ -1,5 +1,5 @@
 import Game from '../models/Game.ts'
-import React, {type ReactElement } from 'react'
+import {type ReactElement } from 'react'
 
 interface GuessesLogProps{
     games: Game[]
