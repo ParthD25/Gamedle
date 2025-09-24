@@ -1,18 +1,3 @@
-/*
- * Database Schema Setup Script
- * 
- * This script creates SQLite database tables for the Gamedle application
- * 
- * Primary Sources:
- * SQLite Tutorial. "SQLite Node.js: Connecting to SQLite Database." 
- * SQLite Tutorial, https://www.sqlitetutorial.net/sqlite-nodejs/connect/. 
- * Accessed 22 Sept. 2025.
- * 
- * SQLite Tutorial. "SQLite Node.js: Creating Tables." 
- * SQLite Tutorial, https://www.sqlitetutorial.net/sqlite-nodejs/create-tables/. 
- * Accessed 22 Sept. 2025.
- */
-
 import sqlite3 from 'sqlite3'
 
 const sql3 = sqlite3.verbose ()
@@ -21,6 +6,7 @@ const sql3 = sqlite3.verbose ()
 // Source: SQLite Tutorial. "SQLite Node.js: Connecting to SQLite Database." 
 // SQLite Tutorial, https://www.sqlitetutorial.net/sqlite-nodejs/connect/. 
 // Accessed 22 Sept. 2025.
+//Source used for  error handling.
 const DB = new sql3.Database('./games.db', (err) => 
     {
     if (err) {
@@ -33,9 +19,6 @@ const DB = new sql3.Database('./games.db', (err) =>
 // Create tables
 function createTables() {
     // Games table
-    // Source: SQLite Tutorial. "SQLite Node.js: Creating Tables." 
-    // SQLite Tutorial, https://www.sqlitetutorial.net/sqlite-nodejs/create-tables/. 
-    // Accessed 22 Sept. 2025.
     let sql = `CREATE TABLE IF NOT EXISTS games (
         id INTEGER PRIMARY KEY,
         name TEXT NOT NULL,

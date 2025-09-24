@@ -88,7 +88,7 @@ function addGame(game) {
 // Source: SQLite Tutorial. "SQLite Node.js: Inserting Data Into a Table." 
 // SQLite Tutorial, https://www.sqlitetutorial.net/sqlite-nodejs/insert/. 
 // Accessed 22 Sept. 2025.
-//
+//Source used for format for this function.
 function linkGameGenres(gameId, genres) {
     if (genres && genres.length > 0) {
         for (let i = 0; i < genres.length; i++) {
