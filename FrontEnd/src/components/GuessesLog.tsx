@@ -13,12 +13,12 @@ function GuessesLog({ games }: GuessesLogProps){
         return(
         <tbody>
             <tr>
-                <td>{games[0].title}</td>
-                <td>{games[0].year}</td>
-                <td>{games[0].genres}</td>
-                <td>{games[0].platforms}</td>
-                <td>{games[0].companies}</td>
-                <td>{games[0].rating}</td>
+                <td>{games[0].getTitle()}</td>
+                <td>{games[0].getYear()}</td>
+                <td>{games[0].getGenres()}</td>
+                <td>{games[0].getPlatforms()}</td>
+                <td>{games[0].getCompanies()}</td>
+                <td>{games[0].getRating()}</td>
             </tr>
         </tbody>
         )
