@@ -30,7 +30,7 @@ class Game{
     //Properties
     public readonly id: number
     public readonly title: string
-    public readonly year?: Date
+    public readonly year?: number
     public readonly rating?: number
     public readonly genres?: string[] 
     public readonly companies?: string[]
@@ -40,7 +40,7 @@ class Game{
     constructor(data: ApiGame){
         this.id = data.id
         this.title = data.name
-        this.year = data.first_release_date ?  new Date(data.first_release_date * 1000) : undefined
+        this.year = data.first_release_date ?  this.getYearFromSeconds(data.first_release_date) : undefined
         this.rating = data.rating
         this.genres = this.getGenres(data.genres ?? [])
         this.companies = this.getCompanies(data.involved_companies ?? [])
@@ -65,6 +65,10 @@ class Game{
             return item.name
         })
         return listOfPlatforms
+    }
+    private getYearFromSeconds(dateInSeconds: number): number{
+        const year =  new Date(dateInSeconds * 1000).getFullYear()
+        return year
     }
 }
 

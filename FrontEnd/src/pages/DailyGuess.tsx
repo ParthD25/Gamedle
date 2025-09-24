@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 //Components:
-import SubmitGuess from "../components/SubmitGuess"
+// import SubmitGuess from "../components/SubmitGuess"
 import GuessesLog from '../components/GuessesLog'
 import Game from '../models/Game.ts'
 
 function DailyGuess(){
-    const [log, setLog] = useState('')
+    const [guessedGames, setGuessedGames] = useState<Game[]>([])
 
     //VVVV Experimental code - delete before pushing VVVVVV
     const data = {
@@ -57,8 +57,15 @@ function DailyGuess(){
 
 
 
-  const game1 = new Game(data)
-  game1.printAttributes()
+  
+  useEffect(()=>{
+      const game1: Game = new Game(data)
+    setGuessedGames(prev =>{
+        return [...prev, game1]
+    })
+  }, [])
+
+
 
   //^^^^^ experimental code - delete before pushing ^^^^^
 
@@ -68,9 +75,10 @@ function DailyGuess(){
     return(
         <>
             <h3>Daily Game - Enter a game title</h3>
-            <SubmitGuess onSubmitGuess={setLog}/>
-            <p id="Logger">{log}</p>
-            <GuessesLog/>
+            {/* <SubmitGuess onSubmitGuess={setLog}/> */}
+            <GuessesLog 
+            games = {guessedGames}
+            />
         </>
     )
 }
