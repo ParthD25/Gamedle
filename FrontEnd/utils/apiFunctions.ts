@@ -1,19 +1,23 @@
+import {type ApiGame } from "../src/models/Game"
 
-export async function fetchGameData<T>(url: string, options?:RequestInit): Promise<T>{
-    try {
-        const response = await fetch(url, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            ...options
+const requestGameDataWithTitle = async (gameTitle: string): Promise<ApiGame | undefined>=>{
+    const URL = 'http://localhost:3000/api/game/lookUpByTitle'
+    const bodyData = {
+        title: gameTitle
+    }
+    try{
+        const response = await fetch(URL ,{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(bodyData)
         })
-        if(!response.ok){
-            throw new Error(`Error ${response.status}: ${response.statusText}`)
-        }
-
-        return (await response.json()) as T
-    } catch (error) {
-        console.error("API fetch error:", error)
-        throw error
+        const data = response.json()
+        return data
+    }catch(err){
+        console.error(err)
     }
 }
+
+
+
+export { requestGameDataWithTitle }
