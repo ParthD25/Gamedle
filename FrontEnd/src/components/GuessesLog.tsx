@@ -1,5 +1,6 @@
 import Game from '../models/Game.ts'
 import {type ReactElement } from 'react'
+import './GuessesLog.css'
 
 interface GuessesLogProps{
     games: Game[]

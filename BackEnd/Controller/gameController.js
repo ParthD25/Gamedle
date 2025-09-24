@@ -1,4 +1,4 @@
-
+import Game from '../../FrontEnd/src/models/Game.ts'
 
 //return the game of the day 
 export const getDailyGame = (req, res)=>{
@@ -6,9 +6,65 @@ export const getDailyGame = (req, res)=>{
   res.status(200).send(gameData)
 }
 
+//return a game based on the title
+export const searchGameByTitle = (req, res) =>{
+    const { title } = req.body
+    //check if game exists
+    const gameData = lookUpByTitle(title)
+    //return if exists
+        res.status(200).send(gameData)
+    //error handling
+}
 
 
 
+
+//DB LookUps
+const lookUpByTitle = title =>{
+    const data = {
+    "id": 47,
+    "first_release_date": 1245715200,
+    "genres": [
+      {
+        "id": 25,
+        "name": "Hack and slash/Beat 'em up"
+      },
+      {
+        "id": 31,
+        "name": "Adventure"
+      }
+    ],
+    "involved_companies": [
+      {
+        "id": 924,
+        "company": {
+          "id": 115,
+          "name": "Codemasters"
+        }
+      },
+      {
+        "id": 923,
+        "company": {
+          "id": 163,
+          "name": "Climax Studios"
+        }
+      }
+    ],
+    "name": "Overlord: Dark Legend",
+    "platforms": [
+      {
+        "id": 5,
+        "name": "Wii"
+      }
+    ]
+  }
+  return data
+}
+
+
+
+
+//UTILITY FUNCTIONS
 
 
 //Return a random game
