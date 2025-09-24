@@ -2,7 +2,7 @@ import sqlite3 from 'sqlite3'
 
 const sql3 = sqlite3.verbose ()
 
-// Create database connection
+// Create  connection for database
 // Source: SQLite Tutorial. "SQLite Node.js: Connecting to SQLite Database." 
 // SQLite Tutorial, https://www.sqlitetutorial.net/sqlite-nodejs/connect/. 
 // Accessed 22 Sept. 2025.
