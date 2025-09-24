@@ -13,16 +13,25 @@ function GuessesLog({ games }: GuessesLogProps){
     const generateGuessedGamesTable = ():ReactElement=>{
         return(
         <tbody>
-            <tr>
-                <td>{games[0].getTitle()}</td>
-                <td>{games[0].getYear()}</td>
-                <td>{games[0].getGenres()}</td>
-                <td>{games[0].getPlatforms()}</td>
-                <td>{games[0].getCompanies()}</td>
-                <td>{games[0].getRating()}</td>
-            </tr>
+            {GuessedGamesTableElements(games)}
         </tbody>
         )
+    }
+
+    const GuessedGamesTableElements = (games: Game[]):ReactElement[]=>{
+        let elements = games.map((item)=>{
+            return(
+                <tr key={item.getId()}>
+                    <td>{item.getTitle()}</td>
+                    <td>{item.getYear()}</td>
+                    <td>{item.getGenres()}</td>
+                    <td>{item.getPlatforms()}</td>
+                    <td>{item.getCompanies()}</td>
+                    <td>{item.getRating()}</td>
+                </tr>
+            )
+        })
+        return elements
     }
 
     //Checks if Games has been passed or guessed

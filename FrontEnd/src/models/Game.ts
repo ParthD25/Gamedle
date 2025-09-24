@@ -112,3 +112,4 @@ class Game{
 }
 
 export default Game
+export {type ApiGame }
