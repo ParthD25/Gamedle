@@ -7,7 +7,7 @@ const sql3 = sqlite3.verbose ()
 // SQLite Tutorial, https://www.sqlitetutorial.net/sqlite-nodejs/connect/. 
 // Accessed 22 Sept. 2025.
 //Source used for  error handling.
-const DB = new sql3.Database('./games.db', (err) => 
+const DB = new sql3.Database('./DB/games.db', (err) => 
     {
     if (err) {
         console.log('Error connecting to database:', err)
