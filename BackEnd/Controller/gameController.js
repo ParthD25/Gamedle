@@ -1,4 +1,3 @@
-import Game from '../../FrontEnd/src/models/Game.ts'
 
 //return the game of the day 
 export const getDailyGame = (req, res)=>{
