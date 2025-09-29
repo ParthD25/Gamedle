@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 // import { DB } from './connectDb.js'
 import gameRoutes from './Routes/gameRoutes.js'
+import userRoutes from './Routes/userRoutes.js'
 
 
 dotenv.config()
@@ -18,7 +19,7 @@ app.use(cors({origin: ORIGIN_URL}))
 
 //Routes
 app.use('/api/game', gameRoutes)
-// app.use('/api/user', userRoutes)
+app.use('/api/users', userRoutes)
 
 
 
