@@ -6,6 +6,7 @@ let gamesCount = 0
 let genresCount = 0
 let companiesCount = 0
 let platformsCount = 0
+let filteredGamesCount = 0
 
 console.log('Starting to import games data.............' )
 
@@ -18,6 +19,54 @@ const data = fs.readFileSync('./GamesData.json', 'utf8' )
 const games = JSON.parse(data)
 
 console.log ('Found ' + games.length + ' games to import ')
+
+
+
+//Function will filter out non-English games from being imported
+
+function shouldImportGame(game) {
+    
+    if (!text) return true; // Allow null/undefined
+    for (let i = 0; i < text.length; i++) {
+        const charCode = text.charCodeAt(i);
+
+    if (charCode > 127) {
+        return false; // Non-English Characters were found
+    }
+}
+return true; // All characters are English Characters
+
+if (!isEnglishOnly(game.name)) {
+        return false
+    }   
+
+    if (game.involved_companies) {
+        for (let company of game.involved_companies ) {
+            if (company.company && !isEnglishOnly(company.company.name)) {
+                return false
+            }
+
+        }
+    }
+
+    if (game.genres) {
+        for (let genre of game.genres) {
+            if (!isEnglishOnly(genre.name)) {
+                return  false;
+             }
+             }
+    }
+    if (game.platforms) {
+        for (let platform of game.platforms) {
+            if (!isEnglishOnly(platform.name)) {
+                return false
+            }
+        }
+    }
+return true;
+}
+
+
 
 // Function to add a genre to the database
 // Source: SQLite Tutorial. "SQLite Node.js: Inserting Data Into a Table." 
@@ -147,6 +196,12 @@ console.log('Starting to process games...')
 for (let i = 0; i < games.length; i++) {
     const game = games[i]
     
+    // Skip games with non-English names
+    if (!shouldImportGame(game)) {
+        filteredGamesCount++;
+        continue;
+    }
+    
     // Add the game
     addGame (game)
     
@@ -159,7 +214,9 @@ for (let i = 0; i < games.length; i++) {
 // Wait a bit then show the final results of the game
 setTimeout(() => {
     console.log ('\\n=== Import Complete ===')
+    console.log ('Total games processed:', games.length)
     console.log ('Games imported:', gamesCount)
+    console.log ('Games filtered (non-English):', filteredGamesCount)
     console.log ('Genres added:', genresCount)
     console.log ('Companies added:', companiesCount) 
     console.log ('Platforms added:', platformsCount)
