@@ -41,8 +41,7 @@ DB.get('SELECT * FROM games WHERE LOWER (name) = LOWER(?)', [title], (err, row) 
         return res.status(404).send({ error: ' Game not found' });
     }
     res.status(200).send(row);
-}
-);
+});
 
 
 
