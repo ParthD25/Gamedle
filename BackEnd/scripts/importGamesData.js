@@ -20,42 +20,160 @@ const games = JSON.parse(data)
 
 console.log ('Found ' + games.length + ' games to import ')
 
+// Create tables first before importing
+function createTables() {
+  // Games table
+  let sql = `CREATE TABLE IF NOT EXISTS games (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        release_date INTEGER,
+        rating REAL
+    )`
+    
+    DB.run(sql, [], (err) => {
+        if (err) {
+            console.log('Error creating games table:', err)
+            return
+        }
+        console.log('Games table created')
+    } )
 
+    // Genres table
+    sql = `CREATE TABLE IF NOT EXISTS genres (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL
+    )`
+    
+  DB.run(sql, [], (err) => {
+        if (err) {
+            console.log('Error creating genres table:', err)
+            return
+        }
+        console.log('Genres table created')
+    } 
+)
+
+    // Companies table
+    sql = `CREATE TABLE IF NOT EXISTS companies (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL
+    )`
+    
+    DB.run(sql, [], (err) => {
+        if (err) {
+            console.log('Error creating companies table:', err)
+            return
+        }
+        console.log('Companies table created')
+    } )
+
+  // Platforms table
+    sql = `CREATE TABLE IF NOT EXISTS platforms (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL
+    )`
+    
+    DB.run(sql, [], (err) => {
+        if (err) {
+            console.log('Error creating platforms table:', err)
+            return
+        }
+        console.log('Platforms table created')
+    } 
+)
+
+    // Game genres table
+    sql = `CREATE TABLE IF NOT EXISTS game_genres (
+        game_id INTEGER,
+        genre_id INTEGER,
+        FOREIGN KEY (game_id) REFERENCES games (id),
+        FOREIGN KEY (genre_id) REFERENCES genres (id)
+    )`
+    
+    DB.run(sql, [], (err) => {
+        if (err) {
+            console.log('Error creating game_genres table:', err)
+            return
+        }
+        console.log('Game genres table created')
+    }
+)
+
+  // Game companies table
+    sql = `CREATE TABLE IF NOT EXISTS game_companies (
+        game_id INTEGER,
+        company_id INTEGER,
+        FOREIGN KEY (game_id) REFERENCES games (id),
+        FOREIGN KEY (company_id) REFERENCES companies (id)
+    )`
+    
+    DB.run(sql, [], (err) => {
+        if (err) {
+            console.log('Error creating game_companies table:', err)
+            return
+        }
+        console.log('Game companies table created')
+    } )
+
+    // Game platforms table
+    sql = `CREATE TABLE IF NOT EXISTS game_platforms (
+        game_id INTEGER,
+        platform_id INTEGER,
+        FOREIGN KEY (game_id) REFERENCES games (id),
+        FOREIGN KEY (platform_id) REFERENCES platforms (id)
+    )`
+    
+    DB.run(sql, [], (err) => {
+        if (err) {
+            console.log('Error creating game_platforms table:', err)
+            return
+        }
+        console.log('Game platforms table created')
+    } 
+)
+}
+
+// Create tables first
+createTables()
 
 //Function will filter out non-English games from being imported
 
-function shouldImportGame(game) {
-    
+function isEnglishOnly(text) {
     if (!text) return true; // Allow null/undefined
     for (let i = 0; i < text.length; i++) {
         const charCode = text.charCodeAt(i);
-
-    if (charCode > 127) {
-        return false; // Non-English Characters were found
+        if (charCode > 127) {
+            return false; // Non-English Characters were found
+        }
     }
+    return true; // All characters are English Characters
 }
-return true; // All characters are English Characters
 
-if (!isEnglishOnly(game.name)) {
+function shouldImportGame(game) {
+    // check game name
+    if (!isEnglishOnly(game.name)) {
         return false
-    }   
+    }
 
+    // check company names for english characters
     if (game.involved_companies) {
         for (let company of game.involved_companies ) {
             if (company.company && !isEnglishOnly(company.company.name)) {
                 return false
             }
-
         }
     }
 
+    // check genre names for english characters
     if (game.genres) {
         for (let genre of game.genres) {
             if (!isEnglishOnly(genre.name)) {
-                return  false;
-             }
-             }
+                return false
+            }
+        }
     }
+
+    // check platform names for english characters
     if (game.platforms) {
         for (let platform of game.platforms) {
             if (!isEnglishOnly(platform.name)) {
@@ -63,7 +181,8 @@ if (!isEnglishOnly(game.name)) {
             }
         }
     }
-return true;
+
+    return true
 }
 
 
