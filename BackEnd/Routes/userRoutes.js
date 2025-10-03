@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { findUserByEmail } from "../Controller/userController.js";
+import {
+    findUserByEmail,
+    signUpUser,
+    loginUserByEmail,
+    updatePassword,
+    deleteUserByEmail
+} from "../Controller/userController.js"
 
 const router = Router()
 
