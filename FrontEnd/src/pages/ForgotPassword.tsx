@@ -1,4 +1,5 @@
 import { useState } from "react"
+import './ForgotPassword.css'
 
 function ForgotPassword(){
     const [email, setEmail] = useState<string>("")
@@ -16,11 +17,11 @@ function ForgotPassword(){
 
 
     return(
-        <>
+        <div className="forgotPassword-wrapper">
             <h2>Reset Your Password</h2>
-            <div>
+            <div className="reset-wrapper">
                 <p>Enter your email address to reset your password:</p>
-                <form onSubmit={handleSubmit}>
+                <form className="reset-form" onSubmit={handleSubmit}>
                     <input 
                         type="email" 
                         name="email"
@@ -32,7 +33,7 @@ function ForgotPassword(){
                     <button type="submit">Submit</button>
                 </form>
             </div>
-        </>
+        </div>
     )
 }
 

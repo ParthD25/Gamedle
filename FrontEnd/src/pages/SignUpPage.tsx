@@ -45,10 +45,11 @@ function SignUpPage(){
     }
 
     return(
-        <>
-            <h2>SignUp Page</h2>
-            <form className="form-wrapper" onSubmit={handleSubmit}>
+        <div className="signup-wrapper">
+            <h2>Sign up to Gamedle</h2>
+            <form className="signup-form" onSubmit={handleSubmit}>
                 <input 
+                    className="credentials-input"
                     type="email"
                     name="email"
                     value={credentials.email}
@@ -57,6 +58,7 @@ function SignUpPage(){
                     required
                 />
                 <input
+                    className="credentials-input"
                     type="text"
                     name="username"
                     value={credentials.username}
@@ -65,6 +67,7 @@ function SignUpPage(){
                     required
                 />
                 <input
+                    className="credentials-input"
                     type="password"
                     name="password1"
                     value={credentials.password1}
@@ -73,6 +76,7 @@ function SignUpPage(){
                     required
                 />
                 <input
+                    className="credentials-input"
                     type="password"
                     name="password2"
                     value={credentials.password2}
@@ -88,7 +92,7 @@ function SignUpPage(){
                     <p>Log In</p>
                 </Link>
             </div>
-        </>
+        </div>
     )
 }
 

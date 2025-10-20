@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import './LoginPage.css'
 
 
 interface emailAndPassword{
@@ -30,10 +31,11 @@ function LoginPage(){
     }
 
     return(
-        <>
-            <h2>Login Page</h2>
-            <form onSubmit={handleSubmit}>
+        <div className="login-wrapper">
+            <h2>Login to Gamedle</h2>
+            <form className="credentials-form" onSubmit={handleSubmit}>
                 <input
+                    className="credentials-input"
                     type="text" 
                     name="email"
                     value={emailAndPassword.email}
@@ -42,6 +44,7 @@ function LoginPage(){
                     required
                 />                
                 <input
+                    className="credentials-input"
                     type="text" 
                     name="password"
                     value={emailAndPassword.password}
@@ -56,7 +59,7 @@ function LoginPage(){
                     <p>Forgot Password?</p>
                 </Link>
             </div>
-        </>
+        </div>
     )
 }
 

@@ -1,0 +1,15 @@
+.submitGuess-container{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.inputForm{
+    display:flex;
+    gap: 1rem;
+}
+
+.inputForm-inputBox{
+    font-size: large;
+}

@@ -1,0 +1,28 @@
+.guessesLog-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.guesses-table{
+    border: 2px solid gray;
+    border-radius: 5px;
+    padding: .5rem;
+}
+
+.guesses-row{
+    border-bottom: 1px solid red;
+}
+.guesses-label{
+    border-bottom: 1px solid grey;
+}
+.tablerow-label{
+    display:flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+.noGuess-data{
+    font-style: italic;
+}
+.gameGuess-data{
+    font-style: normal;
+}

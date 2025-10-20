@@ -3,6 +3,7 @@ import { requestGameDataWithTitle } from '../../utils/apiFunctions.ts'
 import SubmitGuess from "../components/SubmitGuess"
 import GuessesLog from '../components/GuessesLog'
 import Game from '../models/Game.ts'
+import './DailyGuess.css'
 
 function DailyGuess(){
     const [guessedGames, setGuessedGames] = useState<Game[]>([])
@@ -38,13 +39,13 @@ function DailyGuess(){
 
 
     return(
-        <>
-            <h3>Daily Game - Enter a game title</h3>
+        <div className='dailyGuess-wrapper'>
+            <h3 className='infoForUser'>Submit a Game Title to begin!</h3>
             <SubmitGuess onSubmitGuess={handleSubmitGuess}/>
             <GuessesLog 
             games = {guessedGames}
             />
-        </>
+        </div>
     )
 }
 

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import './SubmitGuess.css'
 
 interface SubmitGuessProps{
     onSubmitGuess: (val: string) => void
@@ -21,13 +22,16 @@ function SubmitGuess( { onSubmitGuess } : SubmitGuessProps){
     }
 
     return(
-        <form onSubmit={handleSubmit}>
-         <input
-            value={input}
-            onChange={handleChange}
-        />
-         <button>Submit</button>
-        </form>
+        <div className="submitGuess-container">
+            <form className='inputForm' onSubmit={handleSubmit}>
+                <input
+                    className='inputForm-inputBox'
+                    value={input}
+                    onChange={handleChange}
+                />
+                <button>Submit</button>
+            </form>
+        </div>
     )
 }
 

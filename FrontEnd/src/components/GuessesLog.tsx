@@ -22,12 +22,12 @@ function GuessesLog({ games }: GuessesLogProps){
         let elements = games.map((item)=>{
             return(
                 <tr key={item.getId()}>
-                    <td>{item.getTitle()}</td>
-                    <td>{item.getYear()}</td>
-                    <td>{item.getGenres()}</td>
-                    <td>{item.getPlatforms()}</td>
-                    <td>{item.getCompanies()}</td>
-                    <td>{item.getRating()}</td>
+                    <td className='gameGuess-data'>{item.getTitle()}</td>
+                    <td className='gameGuess-data'>{item.getYear()}</td>
+                    <td className='gameGuess-data'>{item.getGenres()}</td>
+                    <td className='gameGuess-data'>{item.getPlatforms()}</td>
+                    <td className='gameGuess-data'>{item.getCompanies()}</td>
+                    <td className='gameGuess-data'>{item.getRating()}</td>
                 </tr>
             )
         })
@@ -40,22 +40,22 @@ function GuessesLog({ games }: GuessesLogProps){
         else return true
     }
     return(
-        <>
-            <table >
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Year</th>
-                        <th>Genre</th>
-                        <th>Platform</th>
-                        <th>Companies</th>
-                        <th>Rating</th>
+        <div className='guessesLog-container'>
+            <table className='guesses-table'>
+                <thead className='tableHead'>
+                    <tr className='tablerow-label'>
+                        <th className='guesses-label'>Title</th>
+                        <th className='guesses-label'>Year</th>
+                        <th className='guesses-label'>Genre</th>
+                        <th className='guesses-label'>Platform</th>
+                        <th className='guesses-label'>Companies</th>
+                        <th className='guesses-label'>Rating</th>
                     </tr>
                 </thead>
                 {checkForGames() ? generateGuessedGamesTable() : 
-                    <tbody><tr><td>No Guesses Yet!</td></tr></tbody>}
+                    <tbody><tr><td className='noGuess-data'>No Guesses Yet!</td></tr></tbody>}
             </table>
-        </>
+        </div>
     )
 }
 
