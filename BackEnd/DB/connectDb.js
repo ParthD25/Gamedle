@@ -12,23 +12,19 @@ function connectedToDB(err){
     console.log(`Connected to the DB.`)
 }
 
-let sql = `CREATE TABLE IF NOT EXISTS game(
-    game_title TEXT PRIMARY KEY,
-    game_year INTEGER NOT NULL
-)`
 
-DB.run(sql, [], (err) => {
-    if (err) {
-        console.log('Error creating users table:', err)
-        return
-    }
-    console.log('Users table created')
-})
+// DB.run(sql, [], (err) => {
+//     if (err) {
+//         console.log('Error creating users table:', err)
+//         return
+//     }
+//     console.log('Users table created')
+// })
 
 export { DB }
-sql = `CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-)`
+// sql = `CREATE TABLE IF NOT EXISTS users (
+//     id INTEGER PRIMARY KEY AUTOINCREMENT,
+//     email TEXT UNIQUE NOT NULL,
+//     password TEXT NOT NULL,
+//     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+// )`

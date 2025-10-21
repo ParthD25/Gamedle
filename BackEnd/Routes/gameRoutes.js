@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { getDailyGame, searchGameByTitle } from "../Controller/gameController.js"
+import { getDailyGame, searchGameByTitle, getRandomGame } from "../Controller/gameController.js"
 
 
 const router = Router()

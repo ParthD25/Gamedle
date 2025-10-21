@@ -29,20 +29,22 @@ export const searchGameByTitle = (req, res) =>{
     if (!title || title.trim() === '') {
         return res.status(400).send({ error: 'Title is required ' })
     }
-DB.get('SELECT * FROM games WHERE LOWER (name) = LOWER(?)', [title], (err, row) => {
-    // only find game titles with exact title lowercase of case sensitivity.
-    if (err) {
-        //handles error for database issues
-        console.error('Database error:', err)
-        return res.status(500).send({ error: 'Database error' });
-    }
-    if (!row) {
-        //if no games were found throw an error
-        return res.status(404).send({ error: ' Game not found' });
-    }
-    res.status(200).send(row);
-});
+    DB.get('SELECT * FROM games WHERE LOWER (name) = LOWER(?)', [title], (err, row) => {
+        // only find game titles with exact title lowercase of case sensitivity.
+        if (err) {
+            //handles error for database issues
+            console.error('Database error:', err)
+            return res.status(500).send({ error: 'Database error' });
+        }
+        if (!row) {
+            //if no games were found throw an error
+            return res.status(404).send({ error: ' Game not found' });
+        }
+        res.status(200).send(row);
+    });
+}
 
-
-
+export const getRandomGame = (req, res) =>{
+    console.log("getRandomGame route hit")
+    return res.status(200).send({message: 'getRandomGame Route'})
 }
