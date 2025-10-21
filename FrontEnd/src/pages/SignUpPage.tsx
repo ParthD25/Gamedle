@@ -86,7 +86,7 @@ function SignUpPage(){
                 />
                 <button type="submit">Sign Up</button>
             </form>
-            <div>
+            <div className="prevAccountwrapper">
                 <p>Already have an account?</p> 
                 <Link to='/login'>
                     <p>Log In</p>
