@@ -62,4 +62,18 @@ export async function getUser(email: string) {
     return res.json()
 }
 
+// Sign up user
+export async function signUpUser(email: string, password: string) {
+    const res = await fetch(`${API}/signUpUser`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+    })
+
+    if (!res.ok) {
+        throw new Error("Unable to Sign up user")
+    }
+    return res.json()
+}
+
 export { requestGameDataWithTitle }

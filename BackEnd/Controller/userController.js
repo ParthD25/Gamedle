@@ -1,24 +1,29 @@
-import bcrypt from "bcryptjs"
+import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { DB } from "../DB/connectDb.js"
 
 // Register
-export const signUpUser = (req, res) => {
+export const signUpUser = async (req, res) => {
     const { email, password } = req.body
     if (!email || !password) {
         return res.status(400).json({ error: "Email and password required" })
     }
-
-    const hashedPassword = bcrypt.hashSync(password, 10)
-
+    
+    const hashedPassword = await bcrypt.hash(password,10)
+    
     DB.run(`INSERT INTO users (email, password) VALUES (?, ?)`,
         [email, hashedPassword],
         function (err) {
             if (err) {
+                console.log(err)
                 return res.status(400).json({ error: "User already exists" })
             }
-            res.status(201).json({ id: this.lastID, email })
-        })
+            console.log("User Created")
+            const token = jwt.sign({ id: this.lastID, email }, "SECRET", { expiresIn: "1h" })
+            console.log(`Token created: ${token}`)
+            return res.status(201).json({ token })
+    })
+
 }
 
 // Login

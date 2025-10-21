@@ -12,6 +12,12 @@ function connectedToDB(err){
     console.log(`Connected to the DB.`)
 }
 
+// let sql = `CREATE TABLE IF NOT EXISTS users (
+//     id INTEGER PRIMARY KEY AUTOINCREMENT,
+//     email TEXT UNIQUE NOT NULL,
+//     password TEXT NOT NULL,
+//     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+// )`
 
 // DB.run(sql, [], (err) => {
 //     if (err) {
@@ -22,9 +28,3 @@ function connectedToDB(err){
 // })
 
 export { DB }
-// sql = `CREATE TABLE IF NOT EXISTS users (
-//     id INTEGER PRIMARY KEY AUTOINCREMENT,
-//     email TEXT UNIQUE NOT NULL,
-//     password TEXT NOT NULL,
-//     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-// )`

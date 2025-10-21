@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import { useState } from "react"
+import { signUpUser } from '../../utils/apiFunctions'
 import './SignUpPage.css'
 
 interface Credentials{
@@ -10,7 +11,7 @@ interface Credentials{
 }
 
 function SignUpPage(){
-
+    let [didUserSignUp, setDidUserSignUp] = useState(false)
     let [credentials, setCredentials] = useState<Credentials>({
         email: "",
         username: "",
@@ -20,11 +21,8 @@ function SignUpPage(){
 
 
 
-    const handleSubmit = (e: React.FormEvent)=>{
+    const handleSubmit = async (e: React.FormEvent)=>{
         e.preventDefault()
-        //check for email and username is not taken
-
-
 
         //Check for matching password
         if(credentials.password1 !== credentials.password2){
@@ -32,8 +30,15 @@ function SignUpPage(){
             return
         }
 
-        // post api/users/createUser
-        console.log("Unable to create user - server unavailable")
+        try {
+            const data = await signUpUser(credentials.email, credentials.password1)
+            console.log(data) //Token is logged
+            localStorage.setItem("token", data.token)
+            setDidUserSignUp(true)
+        } catch (error) {
+            console.log("Problem when attempting to sign up user")
+            console.error(error)
+        }
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
@@ -44,8 +49,16 @@ function SignUpPage(){
         }))
     }
 
+    let signedUpUserElement = (
+            <div className="userSignedUp-wrapper">
+                <p>Sign up Successful!</p>
+                <Link to={'/DailyGuess'}><button className="btnToPlay">Play Daily Guess</button></Link>
+            </div>
+    )
+
     return(
         <div className="signup-wrapper">
+            {didUserSignUp && signedUpUserElement}
             <h2>Sign up to Gamedle</h2>
             <form className="signup-form" onSubmit={handleSubmit}>
                 <input 
