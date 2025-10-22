@@ -45,6 +45,17 @@ export const searchGameByTitle = (req, res) =>{
 }
 
 export const getRandomGame = (req, res) =>{
-    console.log("getRandomGame route hit")
-    return res.status(200).send({message: 'getRandomGame Route'})
+    DB.get( 'SELECT * FROM games ORDER BY RANDOM() LIMIT 1', [], (err, row) => {
+        if (err) {
+            //error handling for database issues
+            console.error('Database error:', err)
+                return res.status(500).send( { error: 'Database error' } )
+        }
+        if (!row) {
+            //if no game found throw error
+            return res.status(404).send( { error: 'No games found' } )
+        }
+        console.log(row)
+        res.status(200).send(row)
+    })
 }

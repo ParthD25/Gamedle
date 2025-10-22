@@ -1,7 +1,8 @@
 import {type ApiGame } from "../src/models/Game"
 
 
-const requestGameDataWithTitle = async (gameTitle: string): Promise<ApiGame | undefined>=>{
+
+export const requestGameDataWithTitle = async (gameTitle: string): Promise<ApiGame | undefined>=>{
     const URL = 'http://localhost:3000/api/game/lookUpByTitle'
     const bodyData = {
         title: gameTitle
@@ -76,4 +77,23 @@ export async function signUpUser(email: string, password: string) {
     return res.json()
 }
 
-export { requestGameDataWithTitle }
+
+
+
+
+const GAMESAPI = 'http://localhost:3000/api/game'
+//Methods for Game API
+export async function getRandomGame(){
+    try{
+        const res = await fetch(`${GAMESAPI}/getRandomGame`,{
+            method: "GET",
+            headers: { "Content-Type": "application/json"}
+        })
+        const data = await res.json()
+
+        console.log(data)
+    }catch(error){
+        console.log("Unable to get random game")
+        console.error(error)
+    }
+}
