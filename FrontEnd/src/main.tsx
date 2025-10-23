@@ -2,25 +2,33 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
-//pages
+import { AuthProvider } from './context/AuthContext'
+import { ProtectedRoute } from './components/ProtectedRoute'
+import { Layout } from './components/Layout'
+// pages
 import App from './App.tsx'
 import DailyGuess from './pages/DailyGuess.tsx'
 import LoginPage from './pages/LoginPage.tsx'
 import SignUpPage from './pages/SignUpPage.tsx'
 import ForgotPassword from './pages/ForgotPassword.tsx'
+import ProfilePage from './pages/ProfilePage.tsx'
 
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        {/* Routes */}
-        <Route path='/'               element={<App />} />
-        <Route path='/DailyGuess'     element={<DailyGuess/>}/>
-        <Route path='login'           element={<LoginPage/>}/>
-        <Route path='signUp'          element={<SignUpPage/>}/>
-        <Route path='forgotPassword'  element={<ForgotPassword/>}/>
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path='/' element={<Layout />}>
+            <Route index element={<App />} />
+            <Route path='DailyGuess' element={<ProtectedRoute><DailyGuess/></ProtectedRoute>} />
+            <Route path='login' element={<LoginPage/>} />
+            <Route path='signup' element={<SignUpPage/>} />
+            <Route path='forgotPassword' element={<ForgotPassword/>} />
+            <Route path='profile' element={<ProtectedRoute><ProfilePage/></ProtectedRoute>} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>,
 )

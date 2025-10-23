@@ -18,8 +18,23 @@ const DB = new sql3.Database('./DB/games.db', (err) =>
 
 // Create tables
 function createTables() {
+    // Users table
+    const createUsersTable = `CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL
+    )`
+    
+    DB.run(createUsersTable, [], (err) => {
+        if (err) {
+            console.log('Error creating users table:', err)
+            return
+        }
+        console.log('Users table created')
+    })
+
     // Games table
-    let sql = `CREATE TABLE IF NOT EXISTS games (
+    const createGamesTable = `CREATE TABLE IF NOT EXISTS games (
         id INTEGER PRIMARY KEY,
         name TEXT NOT NULL,
         release_date INTEGER,
@@ -124,5 +139,20 @@ function createTables() {
 
 // Run the function to create tables
 createTables()
+
+const statements = [
+  // CREATE TABLE ... statements
+]
+
+// Run sequentially (optional)
+DB.serialize(() => {
+  statements.forEach((stmt) => {
+    DB.run(stmt, [], (err) => {
+      if (err) {
+        console.error('Error running SQL:', stmt, err)
+      }
+    })
+  })
+})
 
 export { DB }

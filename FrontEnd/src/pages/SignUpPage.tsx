@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
-import { signUpUser } from '../../utils/apiFunctions'
+import { register } from '../../utils/apiFunctions'
+import { useAuth } from '../context/AuthContext'
 import './SignUpPage.css'
 
 interface Credentials{
@@ -11,33 +12,36 @@ interface Credentials{
 }
 
 function SignUpPage(){
-    let [didUserSignUp, setDidUserSignUp] = useState(false)
+    const [error, setError] = useState<string | null>(null);
     let [credentials, setCredentials] = useState<Credentials>({
         email: "",
         username: "",
         password1: "",
         password2: ""
     })
-
-
+    const navigate = useNavigate();
+    const { login: authLogin } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent)=>{
         e.preventDefault()
-
-        //Check for matching password
         if(credentials.password1 !== credentials.password2){
-            console.log("PASSWORDS ARE NOT MATCHING")
-            return
+            setError("Passwords do not match");
+            return;
         }
+        setError(null);
 
         try {
-            const data = await signUpUser(credentials.email, credentials.password1)
-            console.log(data) //Token is logged
-            localStorage.setItem("token", data.token)
-            setDidUserSignUp(true)
-        } catch (error) {
-            console.log("Problem when attempting to sign up user")
-            console.error(error)
+            const response = await register(credentials.email, credentials.username, credentials.password1);
+            if (response && response.token) {
+                const user = response.user ?? { email: credentials.email, username: credentials.username }
+                authLogin(response.token, { email: user.email, username: user.username });
+                navigate('/');
+            } else {
+                setError('Registration failed');
+            }
+        } catch (err) {
+            if (err instanceof Error) setError(`Registration failed: ${err.message}`)
+            else setError("Failed to register. Please try again.");
         }
     }
 
@@ -49,17 +53,10 @@ function SignUpPage(){
         }))
     }
 
-    let signedUpUserElement = (
-            <div className="userSignedUp-wrapper">
-                <p>Sign up Successful!</p>
-                <Link to={'/DailyGuess'}><button className="btnToPlay">Play Daily Guess</button></Link>
-            </div>
-    )
-
     return(
         <div className="signup-wrapper">
-            {didUserSignUp && signedUpUserElement}
             <h2>Sign up to Gamedle</h2>
+            {error && <div className="error-message" style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
             <form className="signup-form" onSubmit={handleSubmit}>
                 <input 
                     className="credentials-input"
@@ -87,6 +84,7 @@ function SignUpPage(){
                     onChange={handleChange}
                     placeholder="Password"
                     required
+                    minLength={6}
                 />
                 <input
                     className="credentials-input"
@@ -96,6 +94,7 @@ function SignUpPage(){
                     onChange={handleChange}
                     placeholder="Re-enter Password"
                     required
+                    minLength={6}
                 />
                 <button type="submit">Sign Up</button>
             </form>

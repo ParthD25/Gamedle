@@ -8,14 +8,16 @@ import userRoutes from './Routes/userRoutes.js'
 
 dotenv.config()
 
-const port = process.env.PORT || 8000
+const port = process.env.PORT || 3000
 const app = express()
 
-const ORIGIN_URL = 'http://localhost:5173'
-
+// Allow both potential frontend ports
 //Middleware
 app.use(express.json())
-app.use(cors({origin: ORIGIN_URL}))
+app.use(cors({
+    origin: true,
+    credentials: true
+}))
 
 //Routes
 app.use('/api/game', gameRoutes)

@@ -4,7 +4,9 @@ import {
     signUpUser,
     loginUserByEmail,
     updatePassword,
-    deleteUserByEmail
+    deleteUserByEmail,
+    getCurrentUser,
+    updateUsername
 } from "../Controller/userController.js"
 
 const router = Router()
@@ -18,6 +20,12 @@ router.post('/signUpUser', signUpUser)
 
 //PUT /api/users/loginUser - Log in User by Email
 router.put('/loginUser', loginUserByEmail)
+
+//GET /api/users/me - Get current user from token
+router.get('/me', getCurrentUser)
+
+//PUT /api/users/username - Update current user's username
+router.put('/username', updateUsername)
 
 //PUT /api/users/updatePassword - Update the user's password
 router.put('/updatePassword', updatePassword)

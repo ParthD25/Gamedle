@@ -5,6 +5,8 @@
   justify-content: center;
   width: 100vw;
   gap: 2rem;
+  /* Position the home CTA under the header ~4 inches down */
+  margin-top: 4in;
 }
 .app-container > h1{
   font-weight: normal;
