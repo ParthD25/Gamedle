@@ -12,7 +12,10 @@ function connectedToDB(err){
     console.log(`Connected to the DB.`)
     ensureSchema()
 }
-
+// Sources:
+// - SQLite: “CREATE TABLE IF NOT EXISTS…; PRAGMA table_info; ALTER TABLE … ADD COLUMN.” SQLite Documentation. Accessed 23 Oct. 2025.
+// - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted by the author for correctness.
+// Accessed 23 Oct. 2025.
 function ensureSchema(){
     // Ensure users table exists with username column
     const createUsers = `CREATE TABLE IF NOT EXISTS users (

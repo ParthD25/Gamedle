@@ -2,6 +2,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Header.css';
 
+// Sources:
+// - React Docs. “Function components; conditional rendering; fragments.” Accessed 23 Oct. 2025.
+// - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted by the author for correctness.
+// Accessed 23 Oct. 2025.
 export const Header = () => {
     const { isAuthenticated, userInfo, logout } = useAuth();
     const navigate = useNavigate();

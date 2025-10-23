@@ -63,8 +63,10 @@ export const updatePassword = (req, res) => {
         res.json({ updated: this.changes })
     })
 }
-
-// Auth: get current user from Bearer token
+// Sources:
+// - Auth tokens (JWT): Auth0/jsonwebtoken. “API Reference — jwt.verify(), jwt.sign().” Accessed 23 Oct. 2025.
+// - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted by the author for correctness.
+// Accessed 23 Oct. 2025.
 export const getCurrentUser = (req, res) => {
     try {
         const auth = req.headers.authorization || ""
@@ -81,7 +83,10 @@ export const getCurrentUser = (req, res) => {
     }
 }
 
-// Update username for current user (requires Bearer token)
+// Sources:
+// - Auth tokens (JWT): Auth0/jsonwebtoken. “API Reference — jwt.verify(), jwt.sign().” Accessed 23 Oct. 2025.
+// - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted by the author for correctness.
+// Accessed 23 Oct. 2025.
 export const updateUsername = (req, res) => {
     try {
         const auth = req.headers.authorization || ""

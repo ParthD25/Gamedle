@@ -60,7 +60,10 @@ export async function getUser(email: string) {
     if (!res.ok) throw new Error("User not found")
     return res.json()
 }
-
+// Sources:
+// - MDN Web Docs. “fetch() — Web APIs; Response.ok; Response.json().” Accessed 23 Oct. 2025.
+// - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted by the author for correctness.
+// Accessed 23 Oct. 2025.
 export async function getCurrentUser(token: string) {
     const res = await fetch(`${API}/me`, {
         method: "GET",
@@ -75,7 +78,10 @@ export async function getCurrentUser(token: string) {
     }
     return res.json() as Promise<{ id: number; email: string; username?: string }>
 }
-
+// Sources:
+// - MDN Web Docs. “fetch() — method, headers, body; handling JSON.” Accessed 23 Oct. 2025.
+// - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted by the author for correctness.
+// Accessed 23 Oct. 2025.
 export async function updateUsername(token: string, username: string) {
     const res = await fetch(`${API}/username`, {
         method: 'PUT',

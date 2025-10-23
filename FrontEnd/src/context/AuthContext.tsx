@@ -15,7 +15,10 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
-
+// Sources:
+// - React Docs. “Context; useContext; custom hooks.” Accessed 23 Oct. 2025.
+// - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted by the author for correctness.
+// Accessed 23 Oct. 2025.
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (!context) {
@@ -27,7 +30,10 @@ export const useAuth = () => {
 interface AuthProviderProps {
     children: React.ReactNode;
 }
-
+// Sources:
+// - React Docs. “Context; useState; useEffect; side-effects; provider patterns.” Accessed 23 Oct. 2025.
+// - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted by the author for correctness.
+// Accessed 23 Oct. 2025.
 export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
