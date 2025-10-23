@@ -18,7 +18,9 @@ export const Header = () => {
                         </button>
                     )}
                 </div>
-                <h1 className="logo">Gamedle</h1>
+                <Link to='/'>
+                    <h1 className="logo">Gamedle</h1>
+                </Link>
                 <div className="user-section">
                     {isAuthenticated && userInfo ? (
                         <>
