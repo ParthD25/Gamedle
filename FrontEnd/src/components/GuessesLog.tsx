@@ -24,9 +24,9 @@ function GuessesLog({ games }: GuessesLogProps){
                 <tr className='guessedGameRow' key={item.getId()}>
                     <td className='gameGuess-data'>{item.getTitle()}</td>
                     <td className='gameGuess-data'>{item.getYear()}</td>
-                    <td className='gameGuess-data'>{item.getGenres()}</td>
-                    <td className='gameGuess-data'>{item.getPlatforms()}</td>
-                    <td className='gameGuess-data'>{item.getCompanies()}</td>
+                    <td className='gameGuess-data'>{item.getGenres().join(', ')}</td>
+                    <td className='gameGuess-data'>{item.getPlatforms().join(', ')}</td>
+                    <td className='gameGuess-data'>{item.getCompanies().join(', ')}</td>
                     <td className='gameGuess-data'>{item.getRating()}</td>
                 </tr>
             )

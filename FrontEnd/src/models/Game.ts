@@ -88,25 +88,25 @@ class Game{
     public getRating(): string{
         return this.rating ? this.rating.toString() : "Not Available"
     }
-    public getGenres(): string[] | string{
+    public getGenres(): string[]{
         if(this.genres && this.genres.length > 0){
             return this.genres
         }else{
-            return "Not Available"
+            return ["Not Available"]
         }
     }
-    public getCompanies(): string[] | string{
+    public getCompanies(): string[]{
         if(this.companies && this.companies.length > 0){
             return this.companies
         }else{
-            return "Not Available"
+            return ["Not Available"]
         }
     }
-    public getPlatforms(): string[] | string{
+    public getPlatforms(): string[]{
         if(this.platforms && this.platforms.length > 0){
             return this.platforms
         }else{
-            return "Not Available"
+            return ["Not Available"]
         }
     }
 }

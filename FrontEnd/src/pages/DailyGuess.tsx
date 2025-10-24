@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { requestGameDataWithTitle } from '../../utils/apiFunctions.ts'
 import SubmitGuess from "../components/SubmitGuess"
 import GuessesLog from '../components/GuessesLog'
@@ -15,7 +14,8 @@ function DailyGuess(){
     const [targetGame, setTargetGame] = useState<Game|null>(null)
     const [isGameOver, setIsGameOver] = useState<Boolean>(false)
     const [isCorrectGameGuessed, setIsCorrectGameGuessed] = useState<Boolean>(false)
-    const navigate = useNavigate()
+
+    
     //Get the Target Game from API
     useEffect(()=>{
 
@@ -62,7 +62,7 @@ function DailyGuess(){
 
     //Checks if max guesses are reached
     useEffect(()=>{
-        if (guessCounter >= 2) {
+        if (guessCounter >= 20) {
             setIsGameOver(true)
         }
     }, [guessCounter])
