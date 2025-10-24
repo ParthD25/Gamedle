@@ -132,10 +132,10 @@ export const getRandomGame = (req, res) =>{
                 involved_companies: JSON.parse(row.involved_companies).filter(c => c !== null)
             };
             console.log(gameData);
-            res.status(200).send(gameData);
+            res.status(200).json(gameData);
         } catch (parseError) {
             console.error('Error parsing game data:', parseError);
-            res.status(500).send({ error: 'Data parsing error' });
+            res.status(500).json({ error: 'Data parsing error' });
         }
     });
 }

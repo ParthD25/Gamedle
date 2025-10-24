@@ -2,8 +2,29 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    flex: 1;
+    min-width: 80%;
 }
 .infoForUser{
+    font-weight: bold;
+}
+.guesses{
+    justify-self: flex-start;
+}
+.gameOverMessage{
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    border: 1px solid white;
+    border-radius: 10px;
+    background-color: salmon;
+    padding: 1rem;
+    width: 30%;
+    color:black;
+    text-align: center;
+    font-size: xx-large;
     font-weight: bold;
 }

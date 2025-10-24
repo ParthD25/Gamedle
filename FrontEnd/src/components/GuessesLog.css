@@ -1,28 +1,35 @@
 .guessesLog-container{
     display: flex;
     flex-direction: column;
+    min-width: 80%;
 }
 
 .guesses-table{
     border: 2px solid gray;
     border-radius: 5px;
     padding: .5rem;
+    border-collapse: collapse;
+    table-layout: fixed;
 }
 
-.guesses-row{
-    border-bottom: 1px solid red;
-}
 .guesses-label{
     border-bottom: 1px solid grey;
-}
-.tablerow-label{
-    display:flex;
-    flex-direction: row;
-    gap: 1rem;
 }
 .noGuess-data{
     font-style: italic;
 }
 .gameGuess-data{
     font-style: normal;
+    overflow: hidden;
+    max-width: 3rem;
+}
+.guessedGameRow{
+    text-align: left;
+}
+.guesses-table th,
+.guesses-table td{
+  padding: .5rem;
+  text-align: left;
+  vertical-align: top;
+  word-wrap: break-word;
 }

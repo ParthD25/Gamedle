@@ -21,7 +21,7 @@ function GuessesLog({ games }: GuessesLogProps){
     const GuessedGamesTableElements = (games: Game[]):ReactElement[]=>{
         let elements = games.map((item)=>{
             return(
-                <tr key={item.getId()}>
+                <tr className='guessedGameRow' key={item.getId()}>
                     <td className='gameGuess-data'>{item.getTitle()}</td>
                     <td className='gameGuess-data'>{item.getYear()}</td>
                     <td className='gameGuess-data'>{item.getGenres()}</td>

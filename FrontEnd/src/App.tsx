@@ -5,7 +5,7 @@ function App() {
   return (
     <div className='app-container'>
       <Link to='/DailyGuess'>
-        <button className='btnStyle'>Play Daily Game</button>
+        <button className='btnStyle'>Play Game</button>
       </Link>
     </div>
   )
