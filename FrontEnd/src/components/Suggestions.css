@@ -1,0 +1,17 @@
+.suggestions-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: white;
+    color: black;
+}
+.listItem{
+    padding: .3rem;
+    margin: 0px;
+    border: 0px;
+    border: 1px solid black;
+    font-size: large;
+}
+.listItem:hover{
+    cursor: pointer;
+}

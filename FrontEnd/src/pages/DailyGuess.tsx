@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
+//Helper functions
 import { requestGameDataWithTitle } from '../../utils/apiFunctions.ts'
+import { getRandomGame } from '../../utils/apiFunctions.ts'
+//Components
 import SubmitGuess from "../components/SubmitGuess"
 import GuessesLog from '../components/GuessesLog'
 import Game from '../models/Game.ts'
-import { getRandomGame } from '../../utils/apiFunctions.ts'
+//Styles
 import './DailyGuess.css'
 
 function DailyGuess(){

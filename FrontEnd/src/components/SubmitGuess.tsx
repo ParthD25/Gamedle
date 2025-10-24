@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import './SubmitGuess.css'
+import Suggestions from './Suggestions'
+
 
 interface SubmitGuessProps{
     onSubmitGuess: (val: string) => void
@@ -31,6 +33,7 @@ function SubmitGuess( { onSubmitGuess } : SubmitGuessProps){
                 />
                 <button>Submit</button>
             </form>
+            <Suggestions />
         </div>
     )
 }
