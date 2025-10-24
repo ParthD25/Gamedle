@@ -76,7 +76,6 @@ export const searchGameByTitle = (req, res) =>{
                 genres: JSON.parse(row.genres).filter(g => g !== null),
                 involved_companies: JSON.parse(row.involved_companies).filter(c => c !== null)
             };
-            console.log('Found game:', gameData.name);
             res.status(200).send(gameData);
         } catch (parseError) {
             console.error('Error parsing game data:', parseError);
@@ -131,7 +130,6 @@ export const getRandomGame = (req, res) =>{
                 genres: JSON.parse(row.genres).filter(g => g !== null),
                 involved_companies: JSON.parse(row.involved_companies).filter(c => c !== null)
             };
-            console.log(gameData);
             res.status(200).json(gameData);
         } catch (parseError) {
             console.error('Error parsing game data:', parseError);
@@ -139,3 +137,70 @@ export const getRandomGame = (req, res) =>{
         }
     });
 }
+
+
+
+export const searchForFive = (req, res) => {
+    console.log('searchForFive Route hit');
+    const { title } = req.body;
+
+    if (!title || title.trim() === '') {
+        console.log('No Title');
+        return res.status(400).send({ error: 'Title is required' });
+    }
+
+    DB.all(`
+        SELECT
+            g.id,
+            g.name,
+            g.release_date AS first_release_date,
+            g.rating,
+            COALESCE(
+                json_group_array(
+                    DISTINCT json_object('id', gen.id, 'name', gen.name)
+                ),
+                '[]'
+            ) AS genres,
+            COALESCE(
+                json_group_array(
+                    DISTINCT json_object('id', gc.company_id, 'company', json_object('id', comp.id, 'name', comp.name))
+                ),
+                '[]'
+            ) AS involved_companies
+        FROM games g
+        LEFT JOIN game_genres gg ON g.id = gg.game_id
+        LEFT JOIN genres gen ON gg.genre_id = gen.id
+        LEFT JOIN game_companies gc ON g.id = gc.game_id
+        LEFT JOIN companies comp ON gc.company_id = comp.id
+        WHERE g.name LIKE ?
+        GROUP BY g.id, g.name, g.release_date, g.rating
+        LIMIT 5;
+    `, [`%${title}%`], (err, rows) => {
+        console.log('Searching for:', title);
+
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).send({ error: 'Database error' });
+        }
+
+        if (!rows || rows.length === 0) {
+            console.log('No games found for:', title);
+            return res.status(404).send({ error: 'No games found' });
+        }
+
+        try {
+            const gamesData = rows.map(row => ({
+                ...row,
+                genres: JSON.parse(row.genres).filter(g => g !== null),
+                involved_companies: JSON.parse(row.involved_companies).filter(c => c !== null)
+            }));
+
+            console.log(`Found ${gamesData.length} games`);
+            console.log(gamesData)
+            res.status(200).json(gamesData);
+        } catch (parseError) {
+            console.error('Error parsing game data:', parseError);
+            res.status(500).send({ error: 'Data parsing error' });
+        }
+    });
+};

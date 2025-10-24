@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { getDailyGame, searchGameByTitle, getRandomGame } from "../Controller/gameController.js"
+import { getDailyGame, searchGameByTitle, getRandomGame, searchForFive } from "../Controller/gameController.js"
 
 
 const router = Router()
@@ -9,6 +9,9 @@ router.get('/daily',getDailyGame)
 
 //POST /api/game/lookUpByTitle - Look up game by title
 router.post('/lookUpByTitle', searchGameByTitle)
+
+//POST /api/game/receiveFiveSuggestions - Look up game by title
+router.post('/receiveFiveSuggestions', searchForFive)
 
 //Get /api/game/getRandomGame - returns a random game
 router.get('/getRandomGame', getRandomGame)

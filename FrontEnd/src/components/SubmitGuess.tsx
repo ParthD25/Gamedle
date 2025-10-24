@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './SubmitGuess.css'
 import Suggestions from './Suggestions'
+import { getFiveSuggestions } from '../../utils/apiFunctions'
 
 
 interface SubmitGuessProps{
@@ -22,6 +23,13 @@ function SubmitGuess( { onSubmitGuess } : SubmitGuessProps){
         onSubmitGuess(value) //Lifts input state back up
         setInput("")
     }
+
+    useEffect(()=>{
+        if (input.trim() === "" || input === null){
+            return
+        }
+        console.log(getFiveSuggestions(input))
+    }, [input])
 
     return(
         <div className="submitGuess-container">

@@ -103,13 +103,24 @@ export async function updateUsername(token: string, username: string) {
 
 
 
-const GAMESAPI = `${BASE}/api/game`
 // Methods for Game API
 export async function getRandomGame(){
-    const res = await fetch(`${GAMESAPI}/getRandomGame`,{
+    const res = await fetch(`${GAME_API}/getRandomGame`,{
         method: "GET",
         headers: { "Content-Type": "application/json"}
     })
     if (!res.ok) throw new Error('Unable to get random game')
     return res.json()
+}
+
+export async function getFiveSuggestions(input: string){
+    console.log('hitting helper api function')
+    const res = await fetch(`${GAME_API}/receiveFiveSuggestions`,{
+        method: "POST",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify({title: input})
+    })
+    if(!res.ok) throw new Error("Unable to get 5 suggestions")
+    const data = await res.json()
+    return data
 }
