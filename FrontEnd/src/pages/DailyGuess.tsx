@@ -10,12 +10,12 @@ function DailyGuess(){
     const [guessedGames, setGuessedGames] = useState<Game[]>([])
     const [currentGuess, setCurrentGuess] = useState<Game | null>(null)
     const [guessCounter, setGuessCounter] = useState(0)
-    const [isGameInProgress, setIsGameInProgress] = useState<Boolean>(false)
+    const [isGameInProgress, setIsGameInProgress] = useState<boolean>(false)
     const [targetGame, setTargetGame] = useState<Game|null>(null)
-    const [isGameOver, setIsGameOver] = useState<Boolean>(false)
-    const [isCorrectGameGuessed, setIsCorrectGameGuessed] = useState<Boolean>(false)
+    const [isGameOver, setIsGameOver] = useState<boolean>(false)
+    const [isCorrectGameGuessed, setIsCorrectGameGuessed] = useState<boolean>(false)
+    const [errorMessage, setErrorMessage] = useState<string|null>(null)
 
-    
     //Get the Target Game from API
     useEffect(()=>{
 
@@ -32,8 +32,13 @@ function DailyGuess(){
         fetchData()
     },[])
 
-    console.log(targetGame)
     async function handleSubmitGuess(title:string){
+        //if current guess is already picked, show error message
+        if (!verifyCurrentGuessIsUnique(title)){
+            setErrorMessage("That game has already been guessed")
+            return
+        }
+
         //Look up the game title that is in the text box 
         const returnedGame = await requestGameDataWithTitle(title)
         if(returnedGame === undefined){
@@ -44,6 +49,7 @@ function DailyGuess(){
         setCurrentGuess(gameObject)
         setIsGameInProgress(true)
         setGuessCounter(prev=>prev+1)
+        setErrorMessage(null)
     }
 
     //Update guessedGames to include the currentGuess
@@ -97,6 +103,17 @@ function DailyGuess(){
         )
     }
 
+    //Check if currentGuess is already in the list of guessed games
+    const verifyCurrentGuessIsUnique = (guess: string): boolean =>{
+        let isUnique = true
+        guessedGames.forEach((game)=>{
+            console.log(`Comparing: guess: ${guess} to title: ${game.getTitle()}`)
+            if(guess === game.getTitle()){
+                isUnique = false
+            }
+        })
+        return isUnique
+    }
    
 
     //Elements that will be rendered depending on state
@@ -112,6 +129,7 @@ function DailyGuess(){
             {isGameOver && gameOverElement}
             {isGameInProgress && guessCounterElement}
             {!isGameInProgress && infoForUserElement}
+            {<p className='errorMessage'>{errorMessage}</p>}
             <SubmitGuess onSubmitGuess={handleSubmitGuess}/>
             <GuessesLog 
             games = {guessedGames}

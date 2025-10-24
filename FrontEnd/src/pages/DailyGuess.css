@@ -28,3 +28,6 @@
     font-size: xx-large;
     font-weight: bold;
 }
+.errorMessage{
+    color:red;
+}
