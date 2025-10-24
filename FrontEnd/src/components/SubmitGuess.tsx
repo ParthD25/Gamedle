@@ -9,6 +9,7 @@ interface SubmitGuessProps{
 }
 
 function SubmitGuess( { onSubmitGuess } : SubmitGuessProps){
+    const [suggestions, setSuggestions] = useState<string[]|[]>([])
     const [input, setInput] = useState("")
 
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>) =>{
@@ -24,11 +25,21 @@ function SubmitGuess( { onSubmitGuess } : SubmitGuessProps){
         setInput("")
     }
 
+    //calls API endpoint to receive up to 5 possible title names
     useEffect(()=>{
         if (input.trim() === "" || input === null){
             return
         }
-        console.log(getFiveSuggestions(input))
+        const fetchData = async ()=>{
+            try {
+                const data = await getFiveSuggestions(input)
+                setSuggestions(data)
+            } catch (error) {
+                console.log("Unable to receive 5 suggestions")
+                console.error(error)
+            }
+        }
+        fetchData()
     }, [input])
 
     return(
@@ -41,7 +52,7 @@ function SubmitGuess( { onSubmitGuess } : SubmitGuessProps){
                 />
                 <button>Submit</button>
             </form>
-            <Suggestions />
+            <Suggestions listOfTitles={suggestions}/>
         </div>
     )
 }

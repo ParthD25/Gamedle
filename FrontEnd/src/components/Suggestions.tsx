@@ -1,18 +1,28 @@
-
-
+import type { ReactNode } from 'react'
 import './Suggestions.css'
 
+interface SuggestionProps{
+    listOfTitles: string[]
+}
 
 
-function Suggestions(){
+function Suggestions({ listOfTitles }: SuggestionProps){
+
+    console.log(listOfTitles)
+
+
+    const titleSuggestionElements = ():ReactNode =>{
+        let elements: ReactNode = listOfTitles.map((title, index)=>{
+            return(
+                <p className='listItem' key={index}>{title}</p>
+            )
+        })
+        return elements
+    }
 
     return(
         <div className="suggestions-wrapper">
-            <p className='listItem'>Option 1</p>
-            <p className='listItem'>Optoin 2</p>
-            <p className='listItem'>Optoin 3</p>
-            <p className='listItem'>Optoin 2</p>
-            <p className='listItem'>Optoin 3</p>
+            {titleSuggestionElements()}
         </div>
     )
 }

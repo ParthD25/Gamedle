@@ -138,8 +138,10 @@ export const getRandomGame = (req, res) =>{
     });
 }
 
-
-
+// Sources:
+//   Used for retrieving five game suggestions by title. Adapted from getRandomGame() function.
+// - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted
+//   by the author for correctness. Accessed 24 Oct. 2025.
 export const searchForFive = (req, res) => {
     console.log('searchForFive Route hit');
     const { title } = req.body;

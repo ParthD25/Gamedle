@@ -1,5 +1,5 @@
 import { type ApiGame } from "../src/models/Game"
-
+import Game from "../src/models/Game"
 const BASE = 'http://localhost:3000'
 const API = `${BASE}/api/users`
 const GAME_API = `${BASE}/api/game`
@@ -113,8 +113,7 @@ export async function getRandomGame(){
     return res.json()
 }
 
-export async function getFiveSuggestions(input: string){
-    console.log('hitting helper api function')
+export async function getFiveSuggestions(input: string): Promise<string[]>{
     const res = await fetch(`${GAME_API}/receiveFiveSuggestions`,{
         method: "POST",
         headers: { "Content-Type": "application/json"},
@@ -122,5 +121,11 @@ export async function getFiveSuggestions(input: string){
     })
     if(!res.ok) throw new Error("Unable to get 5 suggestions")
     const data = await res.json()
-    return data
+    let gamesArray = data.map((gameData: ApiGame)=>{
+        return new Game(gameData)
+    })
+    let titleArray = gamesArray.map((game: Game)=>{
+        return game.getTitle()
+    })
+    return titleArray
 }

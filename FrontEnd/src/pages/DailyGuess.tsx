@@ -71,7 +71,7 @@ function DailyGuess(){
 
     //Checks if max guesses are reached
     useEffect(()=>{
-        if (guessCounter >= 20) {
+        if (guessCounter >= 2) {
             setIsGameOver(true)
         }
     }, [guessCounter])
