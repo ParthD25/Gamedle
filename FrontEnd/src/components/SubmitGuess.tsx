@@ -28,6 +28,7 @@ function SubmitGuess( { onSubmitGuess } : SubmitGuessProps){
     //calls API endpoint to receive up to 5 possible title names
     useEffect(()=>{
         if (input.trim() === "" || input === null){
+            setSuggestions([])
             return
         }
         const fetchData = async ()=>{
@@ -36,6 +37,7 @@ function SubmitGuess( { onSubmitGuess } : SubmitGuessProps){
                 setSuggestions(data)
             } catch (error) {
                 console.log("Unable to receive 5 suggestions")
+                setSuggestions([])
                 console.error(error)
             }
         }
