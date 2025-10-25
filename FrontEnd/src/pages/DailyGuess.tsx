@@ -18,6 +18,7 @@ function DailyGuess(){
     const [isGameOver, setIsGameOver] = useState<boolean>(false)
     const [isCorrectGameGuessed, setIsCorrectGameGuessed] = useState<boolean>(false)
     const [errorMessage, setErrorMessage] = useState<string|null>(null)
+    const MAXIMUM_NUMBER_OF_GUESSES = 20
 
     //Get the Target Game from API
     useEffect(()=>{
@@ -71,7 +72,7 @@ function DailyGuess(){
 
     //Checks if max guesses are reached
     useEffect(()=>{
-        if (guessCounter >= 2) {
+        if (guessCounter >= MAXIMUM_NUMBER_OF_GUESSES) {
             setIsGameOver(true)
         }
     }, [guessCounter])
@@ -124,8 +125,12 @@ function DailyGuess(){
         <h3 className='infoForUser'>Submit a Game Title to begin!</h3>
     )
     const guessCounterElement = (
-        <h3 className='guesses'>Gusses: {guessCounter}/20</h3>
+        <h3 className='guesses'>Gusses: {guessCounter}/{MAXIMUM_NUMBER_OF_GUESSES}</h3>
     )
+
+    const handleErrorMessage = (error: string)=>{
+        setErrorMessage(error)
+    }
 
     return(
         <div className='dailyGuess-wrapper'>
@@ -133,7 +138,10 @@ function DailyGuess(){
             {isGameInProgress && guessCounterElement}
             {!isGameInProgress && infoForUserElement}
             {<p className='errorMessage'>{errorMessage}</p>}
-            <SubmitGuess onSubmitGuess={handleSubmitGuess}/>
+            <SubmitGuess 
+                onSubmitGuess={handleSubmitGuess}
+                errorMessageHandler = {handleErrorMessage}
+            />
             <GuessesLog 
             games = {guessedGames}
             />

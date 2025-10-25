@@ -6,9 +6,10 @@ import { getFiveSuggestions } from '../../utils/apiFunctions'
 
 interface SubmitGuessProps{
     onSubmitGuess: (val: string) => void
+    errorMessageHandler: (val: string) => void
 }
 
-function SubmitGuess( { onSubmitGuess } : SubmitGuessProps){
+function SubmitGuess( { onSubmitGuess, errorMessageHandler } : SubmitGuessProps){
     const [suggestions, setSuggestions] = useState<string[]|[]>([])
     const [input, setInput] = useState("")
 
@@ -20,9 +21,33 @@ function SubmitGuess( { onSubmitGuess } : SubmitGuessProps){
     const handleSubmit = (e: React.FormEvent) =>{
         e.preventDefault()
         const value = input.trim()
+        
         if(!value) return
+
+        //Does input match a suggestion
+        if(!isTitleSuggested(value)){
+            errorMessageHandler("Please click on one of the suggestions.")
+            setInput("")
+            return
+        }
+
+
         onSubmitGuess(value) //Lifts input state back up
         setInput("")
+    }
+
+    const isTitleSuggested = (title: string): boolean=>{
+        let isValid = false
+        suggestions.forEach(gameTitle =>{
+            if (gameTitle.trim() === title){
+                isValid = true
+            }
+        })
+        return isValid
+    }
+
+    const handleSuggestionClick = (title: string)=>{
+        setInput(title)
     }
 
     //calls API endpoint to receive up to 5 possible title names
@@ -54,7 +79,10 @@ function SubmitGuess( { onSubmitGuess } : SubmitGuessProps){
                 />
                 <button>Submit</button>
             </form>
-            <Suggestions listOfTitles={suggestions}/>
+            <Suggestions 
+                handleSuggestionClick={handleSuggestionClick}
+                listOfTitles={suggestions}
+            />
         </div>
     )
 }
