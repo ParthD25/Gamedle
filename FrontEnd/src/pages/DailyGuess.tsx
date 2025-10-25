@@ -58,9 +58,16 @@ function DailyGuess(){
 
     //Update guessedGames to include the currentGuess
     useEffect(()=>{
-        if(currentGuess?.getTitle === targetGame?.getTitle()){
-            setIsCorrectGameGuessed(true)
+        if(currentGuess?.getTitle() && targetGame?.getTitle()){
+            if(currentGuess?.getTitle() === targetGame?.getTitle()){
+                console.log(currentGuess?.getTitle())
+                console.log(targetGame?.getTitle())
+    
+                setIsCorrectGameGuessed(true)
+                setIsGameOver(true)
+            }
         }
+        
         if(currentGuess){
             setGuessedGames((prev) =>{
                 return(
@@ -103,6 +110,7 @@ function DailyGuess(){
         gameOverElement = (
             <div className='gameOverMessage'>
                 <p>You Lose.</p>
+                <button onClick={handleReplay}>Replay?</button>
             </div>
         )
     }
