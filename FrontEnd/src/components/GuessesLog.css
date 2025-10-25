@@ -33,3 +33,12 @@
   vertical-align: top;
   word-wrap: break-word;
 }
+
+.equal{
+    color: green;
+}
+.arrow{
+    font-size: large;
+    padding-left: .3rem;
+    color: red;
+}

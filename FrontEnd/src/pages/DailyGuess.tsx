@@ -143,7 +143,8 @@ function DailyGuess(){
                 errorMessageHandler = {handleErrorMessage}
             />
             <GuessesLog 
-            games = {guessedGames}
+                target = {targetGame}
+                games = {guessedGames}
             />
         </div>
     )
