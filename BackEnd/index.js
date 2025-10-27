@@ -4,6 +4,7 @@ import cors from 'cors'
 // import { DB } from './connectDb.js'
 import gameRoutes from './Routes/gameRoutes.js'
 import userRoutes from './Routes/userRoutes.js'
+import leaderboardRoutes from './Routes/leaderboardRoutes.js'
 
 
 dotenv.config()
@@ -11,7 +12,6 @@ dotenv.config()
 const port = process.env.PORT || 3000
 const app = express()
 
-// Allow both potential frontend ports
 //Middleware
 app.use(express.json())
 app.use(cors({
@@ -22,6 +22,7 @@ app.use(cors({
 //Routes
 app.use('/api/game', gameRoutes)
 app.use('/api/users', userRoutes)
+app.use('/api/leaderboard', leaderboardRoutes)
 
 
 

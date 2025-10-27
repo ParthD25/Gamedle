@@ -1,7 +1,8 @@
 .guessesLog-container{
     display: flex;
     flex-direction: column;
-    min-width: 80%;
+    width: 100%;
+    max-width: 100%;
 }
 
 .guesses-table{
@@ -9,36 +10,39 @@
     border-radius: 5px;
     padding: .5rem;
     border-collapse: collapse;
-    table-layout: fixed;
+    table-layout: auto;
+    width: 100%;
+    font-size: 14px;
 }
 
 .guesses-label{
     border-bottom: 1px solid grey;
+    padding: 8px;
+    text-align: left;
+    font-weight: bold;
 }
+
 .noGuess-data{
     font-style: italic;
 }
+
 .gameGuess-data{
     font-style: normal;
-    overflow: hidden;
-    max-width: 3rem;
+    padding: 8px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: none;
+    white-space: normal;
 }
+
 .guessedGameRow{
     text-align: left;
 }
+
 .guesses-table th,
 .guesses-table td{
-  padding: .5rem;
-  text-align: left;
-  vertical-align: top;
-  word-wrap: break-word;
-}
-
-.equal{
-    color: green;
-}
-.arrow{
-    font-size: large;
-    padding-left: .3rem;
-    color: red;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid #ddd;
 }

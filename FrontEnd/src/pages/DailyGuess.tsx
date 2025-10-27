@@ -5,6 +5,7 @@ import { getRandomGame } from '../../utils/apiFunctions.ts'
 //Components
 import SubmitGuess from "../components/SubmitGuess"
 import GuessesLog from '../components/GuessesLog'
+import Leaderboard from '../components/Leaderboard'
 import Game from '../models/Game.ts'
 //Styles
 import './DailyGuess.css'
@@ -39,7 +40,7 @@ function DailyGuess(){
     async function handleSubmitGuess(title:string){
         //if current guess is already picked, show error message
         if (!verifyCurrentGuessIsUnique(title)){
-            setErrorMessage("That game has already been guessed")
+            setErrorMessage("That game has already been guessed. Try again!!")
             return
         }
 
@@ -58,14 +59,9 @@ function DailyGuess(){
 
     //Update guessedGames to include the currentGuess
     useEffect(()=>{
-        if(currentGuess?.getTitle() && targetGame?.getTitle()){
-            if(currentGuess?.getTitle() === targetGame?.getTitle()){
-                console.log(currentGuess?.getTitle())
-                console.log(targetGame?.getTitle())
-    
-                setIsCorrectGameGuessed(true)
-                setIsGameOver(true)
-            }
+        if(currentGuess && targetGame && currentGuess !== targetGame && currentGuess.getTitle() === targetGame.getTitle()){
+            setIsCorrectGameGuessed(true)
+            setIsGameOver(true)
         }
         
         if(currentGuess){
@@ -75,7 +71,7 @@ function DailyGuess(){
                 )
             })
         }
-    }, [currentGuess])
+    }, [currentGuess, targetGame])
 
     //Checks if max guesses are reached
     useEffect(()=>{
@@ -87,10 +83,12 @@ function DailyGuess(){
 
     //Handling a Game Over State 
     useEffect(()=>{
-        if(isCorrectGameGuessed){
-            //code to update points
+        if(isCorrectGameGuessed && targetGame){
+            // Calculate score based on guesses used (lower guesses = higher score)
+            const score = Math.max(100 - (guessCounter * 5), 10)
+            submitScore(parseInt(targetGame.getId()), score, guessCounter)
         }
-    },[isGameOver])
+    },[isCorrectGameGuessed])
 
 
     const handleReplay = () =>{
@@ -142,20 +140,45 @@ function DailyGuess(){
 
     return(
         <div className='dailyGuess-wrapper'>
-            {isGameOver && gameOverElement}
-            {isGameInProgress && guessCounterElement}
-            {!isGameInProgress && infoForUserElement}
-            {<p className='errorMessage'>{errorMessage}</p>}
-            <SubmitGuess 
-                onSubmitGuess={handleSubmitGuess}
-                errorMessageHandler = {handleErrorMessage}
-            />
-            <GuessesLog 
-                target = {targetGame}
+            <div className='main-content'>
+                {isGameOver && gameOverElement}
+                {isGameInProgress && guessCounterElement}
+                {!isGameInProgress && infoForUserElement}
+                {<p className='errorMessage'>{errorMessage}</p>}
+                <SubmitGuess onSubmitGuess={handleSubmitGuess} errorMessageHandler={handleErrorMessage}/>
+                <GuessesLog 
                 games = {guessedGames}
-            />
+                target = {targetGame}
+                />
+            </div>
+            <div className='sidebar'>
+                <Leaderboard />
+            </div>
         </div>
     )
 }
 
+
+    // Submit score to leaderboard when game is completed
+    const submitScore = async (gameId: number, finalScore: number, guessesUsed: number) => {
+        try {
+            const token = localStorage.getItem('token')
+            if (!token) return // Only submit if user is logged in
+
+            await fetch('http://localhost:3000/api/leaderboard/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    gameId,
+                    score: finalScore,
+                    guessesUsed
+                })
+            })
+        } catch (error) {
+            console.error('Failed to submit score:', error)
+        }
+    }
 export default DailyGuess

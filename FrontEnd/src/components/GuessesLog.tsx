@@ -54,63 +54,12 @@ function GuessesLog({ games, target }: GuessesLogProps){
             console.log(target)
             return(
                 <tr className='guessedGameRow' key={item.getId()}>
-                    <td className={`gameGuess-data ${isTitleEqual ? 'equal' : ""}`}>
-                        {item.getTitle()}
-                    </td>
-                    <td className={`gameGuess-data ${isYearEqual ? 'equal' : ""}`}>
-                        {item.getYear()}
-                        <span className='arrow'>
-                            {upOrDownArrow(item.getYear(),target?.getYear())}
-                        </span>
-                    </td>
-                    <td className='gameGuess-data'>
-                        {genres.map((genre, index)=>{
-                            const isMatching = target.getGenres().includes(genre)
-                            return(
-                                <span
-                                    key={index}
-                                    className={isMatching ? "equal" : ""}
-                                >
-                                    {genre}
-                                    {index < genres.length - 1 && ', '}
-                                </span>
-                            )
-                        })}
-                    </td>
-                    <td className='gameGuess-data'>
-                        {platforms.map((platform, index)=>{
-                            const isMatching = target.getPlatforms().includes(platform)
-                            return(
-                                <span
-                                    key={index}
-                                    className={isMatching ? "equal" : ""}
-                                >
-                                    {platform}
-                                    {index < platforms.length - 1 && ', '}
-                                </span>
-                            )
-                        })}
-                    </td>
-                    <td className='gameGuess-data'>
-                        {companies.map((company, index)=>{
-                            const isMatching = target.getCompanies().includes(company)
-                            return(
-                                <span
-                                    key={index}
-                                    className={isMatching ? "equal" : ""}
-                                >
-                                    {company}
-                                    {index < companies.length - 1 && ', '}
-                                </span>
-                            )
-                    })}
-                    </td>
-                    <td className={`gameGuess-data ${isRatingEqual ? 'equal' : ""}`}>
-                        {item.getRating()}
-                        <span className='arrow'>
-                            {upOrDownArrow(item.getRating(),target?.getRating())}
-                        </span>
-                    </td>
+                    <td className='gameGuess-data'>{item.getTitle()}</td>
+                    <td className='gameGuess-data'>{item.getYear()}</td>
+                    <td className='gameGuess-data'>{Array.isArray(item.getGenres()) ? item.getGenres().join(', ') : item.getGenres()}</td>
+                    <td className='gameGuess-data'>{Array.isArray(item.getCompanies()) ? item.getCompanies().join(', ') : item.getCompanies()}</td>
+                    <td className='gameGuess-data'>{Array.isArray(item.getPlatforms()) ? item.getPlatforms().join(', ') : item.getPlatforms()}</td>
+                    <td className='gameGuess-data'>{item.getRating()}</td>
                 </tr>
             )
         })
@@ -130,13 +79,13 @@ function GuessesLog({ games, target }: GuessesLogProps){
                         <th className='guesses-label'>Title</th>
                         <th className='guesses-label'>Year</th>
                         <th className='guesses-label'>Genre</th>
-                        <th className='guesses-label'>Platform</th>
                         <th className='guesses-label'>Companies</th>
+                        <th className='guesses-label'>Platforms</th>
                         <th className='guesses-label'>Rating</th>
                     </tr>
                 </thead>
                 {checkForGames() ? generateGuessedGamesTable() : 
-                    <tbody><tr><td className='noGuess-data'>No Guesses Yet!</td></tr></tbody>}
+                    <tbody><tr><td className='noGuess-data' colSpan={6}>No Guesses Yet!</td></tr></tbody>}
             </table>
         </div>
     )
