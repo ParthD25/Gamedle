@@ -44,51 +44,45 @@ function DailyGuess(){
             return
         }
 
-        //Look up the game title that is in the text box 
+        //Look up the game title that is in the text box
         const returnedGame = await requestGameDataWithTitle(title)
         if(returnedGame === undefined){
             return
         }
         //update state to include the newly guessed game object
-        const gameObject = new Game(returnedGame) 
+        const gameObject = new Game(returnedGame)
         setCurrentGuess(gameObject)
         setIsGameInProgress(true)
         setGuessCounter(prev=>prev+1)
         setErrorMessage(null)
     }
 
-    //Update guessedGames to include the currentGuess
-    useEffect(()=>{
-        if(currentGuess && targetGame && currentGuess !== targetGame && currentGuess.getTitle() === targetGame.getTitle()){
+    //Handle game state changes
+    useEffect(() => {
+        if (!currentGuess || !targetGame) return
+
+        //Check if the current guess is correct
+        if (currentGuess.getTitle() === targetGame.getTitle()) {
+            console.log('🎉 WIN DETECTED! Target:', targetGame.getTitle(), 'Guess:', currentGuess.getTitle())
             setIsCorrectGameGuessed(true)
             setIsGameOver(true)
-        }
-        
-        if(currentGuess){
-            setGuessedGames((prev) =>{
-                return(
-                    [...prev,currentGuess]
-                )
-            })
-        }
-    }, [currentGuess, targetGame])
 
-    //Checks if max guesses are reached
-    useEffect(()=>{
+            //Submit score when game is won
+            const score = Math.max(100 - (guessCounter * 5), 10)
+            console.log('🏆 Calculating score:', score, 'for', guessCounter, 'guesses')
+            submitScore(parseInt(targetGame.getId()), score, guessCounter)
+            return
+        }
+
+        //Check if max guesses are reached
         if (guessCounter >= MAXIMUM_NUMBER_OF_GUESSES) {
             setIsGameOver(true)
+            return
         }
-    }, [guessCounter])
 
-
-    //Handling a Game Over State 
-    useEffect(()=>{
-        if(isCorrectGameGuessed && targetGame){
-            // Calculate score based on guesses used (lower guesses = higher score)
-            const score = Math.max(100 - (guessCounter * 5), 10)
-            submitScore(parseInt(targetGame.getId()), score, guessCounter)
-        }
-    },[isCorrectGameGuessed])
+        //Add current guess to the list of guessed games
+        setGuessedGames(prev => [...prev, currentGuess])
+    }, [currentGuess, targetGame, guessCounter])
 
 
     const handleReplay = () =>{
@@ -163,9 +157,8 @@ function DailyGuess(){
     const submitScore = async (gameId: number, finalScore: number, guessesUsed: number) => {
         try {
             const token = localStorage.getItem('token')
-            if (!token) return // Only submit if user is logged in
-
-            await fetch('http://localhost:3000/api/leaderboard/submit', {
+            console.log('📤 Submitting score:', { gameId, finalScore, guessesUsed })
+            const response = await fetch('http://localhost:3000/api/leaderboard/submit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -177,8 +170,14 @@ function DailyGuess(){
                     guessesUsed
                 })
             })
+            
+            if (response.ok) {
+                console.log('✅ Score submitted successfully')
+            } else {
+                console.log('❌ Score submission failed:', response.status, response.statusText)
+            }
         } catch (error) {
-            console.error('Failed to submit score:', error)
+            console.error('💥 Failed to submit score:', error)
         }
     }
 export default DailyGuess

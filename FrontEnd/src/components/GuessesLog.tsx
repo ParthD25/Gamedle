@@ -15,7 +15,7 @@ function GuessesLog({ games, target }: GuessesLogProps){
         if (target){
             return(
             <tbody>
-                {GuessedGamesTableElements(games,target)}
+                {GuessedGamesTableElements(games, target)}
             </tbody>
             )
         }else{
@@ -27,38 +27,39 @@ function GuessesLog({ games, target }: GuessesLogProps){
 
     const GuessedGamesTableElements = (games: Game[], target:Game):ReactElement[]=>{
         let elements = games.map((item)=>{
-            const isTitleEqual = item.getTitle() === target?.getTitle()
-            const isYearEqual = item.getYear() === target?.getYear()
-            const isRatingEqual = item.getRating() === target?.getRating()
-            const genres = item.getGenres()
-            const companies = item.getCompanies()
-            const platforms = item.getPlatforms()
-
-            const upOrDownArrow = (itemValue:string, targetValue:string):string=>{
+            // Helper function to get arrow for string comparison (like old code style)
+            const upOrDownArrow = (guessed: string[], target: string[]):string=>{
                 let arrowSymbol = ""
-                const a = Number(itemValue)
-                const b = Number(targetValue)
-                if(targetValue === "Not Available" || itemValue === "Not Available"){
-                    return '?'
+                if (!guessed || !target || guessed.length === 0 || target.length === 0){
+                    return ''
                 }
-                if(a > b){
-                    arrowSymbol = "↓"
-                }else{
-                    arrowSymbol = "↑"
+
+                // Compare first items alphabetically 
+                const guessedFirst = guessed[0].toLowerCase()
+                const targetFirst = target[0].toLowerCase()
+
+                if(guessedFirst > targetFirst){
+                    arrowSymbol = "↓"  // Too high 
+                }else if(guessedFirst < targetFirst){
+                    arrowSymbol = "↑"  // Too low 
                 }
 
                 return arrowSymbol
             }
 
-
-            console.log(target)
             return(
                 <tr className='guessedGameRow' key={item.getId()}>
                     <td className='gameGuess-data'>{item.getTitle()}</td>
                     <td className='gameGuess-data'>{item.getYear()}</td>
                     <td className='gameGuess-data'>{Array.isArray(item.getGenres()) ? item.getGenres().join(', ') : item.getGenres()}</td>
-                    <td className='gameGuess-data'>{Array.isArray(item.getCompanies()) ? item.getCompanies().join(', ') : item.getCompanies()}</td>
-                    <td className='gameGuess-data'>{Array.isArray(item.getPlatforms()) ? item.getPlatforms().join(', ') : item.getPlatforms()}</td>
+                    <td className='gameGuess-data'>
+                        {Array.isArray(item.getCompanies()) ? item.getCompanies().join(', ') : item.getCompanies()}
+                        {upOrDownArrow(item.getCompanies(), target.getCompanies())}
+                    </td>
+                    <td className='gameGuess-data'>
+                        {Array.isArray(item.getPlatforms()) ? item.getPlatforms().join(', ') : item.getPlatforms()}
+                        {upOrDownArrow(item.getPlatforms(), target.getPlatforms())}
+                    </td>
                     <td className='gameGuess-data'>{item.getRating()}</td>
                 </tr>
             )

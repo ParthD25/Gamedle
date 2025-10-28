@@ -26,6 +26,7 @@ function createTables() {
         username TEXT UNIQUE NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`
+
     
     // Scores table
     const createScoresTable = `CREATE TABLE IF NOT EXISTS scores (
@@ -164,24 +165,34 @@ function createTables() {
         }
         console.log('Game platforms table created')
     })
+    addImprovements();
+
+}
+
+function addImprovements() {
+    // Adding fast search for scores
+    DB.run(`CREATE INDEX IF NOT EXISTS user_scores_idx ON scores(user_id)`, [], (err) => {
+        if (err) console.log('Could not add user scores search:', err);
+        else console.log('Added fast search for user scores');
+    });
+
+    DB.run(`CREATE INDEX IF NOT EXISTS time_scores_idx ON scores(completed_at)`, [], (err) => {
+        if (err) console.log('Could not add time search:', err);
+        else console.log('Added fast search for score times');
+    });
+
+    // Add username ifthey are  missing
+    DB.run(`ALTER TABLE users ADD COLUMN username TEXT`, [], (err) => {
+        // skip if  it already exists
+        if (err && !err.message.includes('duplicate')) {
+            console.log('Could not add username:', err);
+        } else {
+            console.log('Username column ready');
+        }
+    });
+
+    console.log('Database improvements done');
 }
 
 // Run the function to create tables
 createTables()
-
-const statements = [
-  // CREATE TABLE ... statements
-]
-
-// Run sequentially (optional)
-DB.serialize(() => {
-  statements.forEach((stmt) => {
-    DB.run(stmt, [], (err) => {
-      if (err) {
-        console.error('Error running SQL:', stmt, err)
-      }
-    })
-  })
-})
-
-export { DB }
