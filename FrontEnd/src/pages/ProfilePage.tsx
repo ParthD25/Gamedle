@@ -26,8 +26,11 @@ export default function ProfilePage() {
       localStorage.setItem('token', newToken)
       login(newToken, { email: result.user.email, username: result.user.username })
       navigate('/')
-    } catch (e: any) {
-      setError(e?.message || 'Failed to update username')
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message)
+      } else {setError('ERROR:Failed to update username')
+      }
     } finally {
       setSaving(false)
     }

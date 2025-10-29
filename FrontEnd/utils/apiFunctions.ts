@@ -121,10 +121,10 @@ export async function getFiveSuggestions(input: string): Promise<string[]>{
     })
     if(!res.ok) throw new Error("Unable to get 5 suggestions")
     const data = await res.json()
-    let gamesArray = data.map((gameData: ApiGame)=>{
+    const gamesArray = data.map((gameData: ApiGame)=>{
         return new Game(gameData)
     })
-    let titleArray = gamesArray.map((game: Game)=>{
+    const titleArray = gamesArray.map((game: Game)=>{
         return game.getTitle()
     })
     return titleArray

@@ -3,10 +3,8 @@ import {getLeaderboard, submitScore} from '../Controller/leaderboardController.j
 import {authenticateToken} from '../middleware/auth.js'
 
 const router = express.Router()
-
-// Public routeso anyone can view leaderboard
+// Public route to get the leaderboard
 router.get('/', getLeaderboard)
-
 // Protected route which requires authentication to submit/add scores
 router.post('/submit', authenticateToken, submitScore)
 

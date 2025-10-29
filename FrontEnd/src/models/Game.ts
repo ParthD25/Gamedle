@@ -49,23 +49,23 @@ class Game{
 
     //Methods
     private formatRating(rating: number): number{
-        let formattedRating = Math.round(rating * 10) / 10
+        const formattedRating = Math.round(rating * 10) / 10
         return formattedRating
     }
     private createGenresList(genres: ApiGenre[]): string[]{
-        let listOfGenres: string[] = genres.map(item =>{
+        const listOfGenres: string[] = genres.map(item =>{
             return item.name
         })
         return listOfGenres
     }
     private createCompaniesList(companies: ApiCompany[]): string[]{
-        let listOfCompanies: string[] = companies.map(item =>{
+        const listOfCompanies: string[] = companies.map(item =>{
             return item.company.name
         })
         return listOfCompanies
     }
     private createPlatformsList(platforms: ApiPlatform[]): string[]{
-        let listOfPlatforms: string[] = platforms.map(item =>{
+        const listOfPlatforms: string[] = platforms.map(item =>{
             return item.name
         })
         return listOfPlatforms

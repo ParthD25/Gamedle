@@ -18,7 +18,7 @@ function Suggestions({ listOfTitles, handleSuggestionClick }: SuggestionProps){
     }
 
     const titleSuggestionElements = ():ReactNode =>{
-        let elements: ReactNode = listOfTitles.map((title, index)=>{
+        const elements: ReactNode = listOfTitles.map((title, index)=>{
             return(
                 <p data-title={title} onClick={handleClick} className='listItem' key={index}>{title}</p>
             )

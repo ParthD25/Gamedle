@@ -26,7 +26,7 @@ function GuessesLog({ games, target }: GuessesLogProps){
     }
 
     const GuessedGamesTableElements = (games: Game[], target:Game):ReactElement[]=>{
-        let elements = games.map((item)=>{
+        const elements = games.map((item)=>{
             // Helper function to get arrow for string comparison (like old code style)
             const upOrDownArrow = (guessed: string[], target: string[]):string=>{
                 let arrowSymbol = ""
