@@ -1,5 +1,6 @@
 import { DB } from '../DB/connectDb.js'
 
+
 //this gets the leaderboard
 //it shows top players with their stats
 export const getLeaderboard = (req, res) => {

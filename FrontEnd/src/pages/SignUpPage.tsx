@@ -13,7 +13,7 @@ interface Credentials{
 
 function SignUpPage(){
     const [error, setError] = useState<string | null>(null);
-    let [credentials, setCredentials] = useState<Credentials>({
+    const [credentials, setCredentials] = useState<Credentials>({
         email: "",
         username: "",
         password1: "",

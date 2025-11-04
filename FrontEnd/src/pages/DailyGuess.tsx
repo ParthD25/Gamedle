@@ -27,7 +27,7 @@ function DailyGuess(){
         const fetchData = async () =>{
             try {
                 const data = await getRandomGame()
-                let gameObject = new Game(data)
+                const gameObject = new Game(data)
                 setTargetGame(gameObject)
             } catch (error) {
                 console.log('Unable to setTargetGame');

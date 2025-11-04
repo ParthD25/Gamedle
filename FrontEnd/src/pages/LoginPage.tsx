@@ -14,7 +14,7 @@ function LoginPage(){
     const navigate = useNavigate();
     const { login: authLogin } = useAuth();
     const [error, setError] = useState<string | null>(null);
-    let [emailAndPassword, setEmailAndPassword] = useState<emailAndPassword>({
+    const [emailAndPassword, setEmailAndPassword] = useState<emailAndPassword>({
         email: "",
         password: ""
     })
