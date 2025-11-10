@@ -63,13 +63,13 @@ function DailyGuess(){
 
         //Check if the current guess is correct
         if (currentGuess.getTitle() === targetGame.getTitle()) {
-            console.log('🎉 WIN DETECTED! Target:', targetGame.getTitle(), 'Guess:', currentGuess.getTitle())
+            console.log('WIN DETECTED! Target:', targetGame.getTitle(), 'Guess:', currentGuess.getTitle())
             setIsCorrectGameGuessed(true)
             setIsGameOver(true)
 
             //Submit score when game is won
             const score = Math.max(100 - (guessCounter * 5), 10)
-            console.log('🏆 Calculating score:', score, 'for', guessCounter, 'guesses')
+            console.log('Calculating score:', score, 'for', guessCounter, 'guesses')
             submitScore(parseInt(targetGame.getId()), score, guessCounter)
             return
         }
@@ -156,28 +156,12 @@ function DailyGuess(){
     // Submit score to leaderboard when game is completed
     const submitScore = async (gameId: number, finalScore: number, guessesUsed: number) => {
         try {
-            const token = localStorage.getItem('token')
-            console.log('📤 Submitting score:', { gameId, finalScore, guessesUsed })
-            const response = await fetch('http://localhost:3000/api/leaderboard/submit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    gameId,
-                    score: finalScore,
-                    guessesUsed
-                })
-            })
-            
-            if (response.ok) {
-                console.log('✅ Score submitted successfully')
-            } else {
-                console.log('❌ Score submission failed:', response.status, response.statusText)
-            }
+            console.log('Submitting score (Firebase):', { gameId, finalScore, guessesUsed })
+            const { submitScore: submitScoreApi } = await import('../../utils/apiFunctions')
+            await submitScoreApi(String(gameId), finalScore, guessesUsed)
+            console.log('Score submitted successfully')
         } catch (error) {
-            console.error('💥 Failed to submit score:', error)
+            console.error('Failed to submit score:', error)
         }
     }
 export default DailyGuess

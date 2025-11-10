@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import './Leaderboard.css'
+import { getLeaderboard as fetchLeaderboardData } from '../../utils/apiFunctions'
 
 // Interface defining the structure of each leaderboard entry from the API
 interface LeaderboardEntry {
-    username: string
-    games_completed: number
-    avg_guesses: number
-    best_score: number
+    username?: string
+    gamesPlayed: number
+    bestScore: number
 }
 
 function Leaderboard() {
@@ -23,17 +23,18 @@ function Leaderboard() {
         return () => clearInterval(interval)
     }, [])
 
-    // Function to fetch data from the backend API to leaderboard 
+    // Function to fetch data from Firestore via Firebase services
     const fetchLeaderboard = async () => {
         try {
             setError(null)
-            const response = await fetch('http://localhost:3000/api/leaderboard')
-            if (response.ok) {
-                const data = await response.json()
-                setLeaderboard(data)
-            } else {
-                setError('Failed to load leaderboard')
-            }
+            const data = await fetchLeaderboardData()
+            // Map to UI shape
+            const mapped: LeaderboardEntry[] = data.map((u: any) => ({
+                username: u.username || u.email?.split('@')[0],
+                gamesPlayed: u.gamesPlayed || 0,
+                bestScore: u.bestScore || 0
+            }))
+            setLeaderboard(mapped)
         } catch (error) {
             console.error('Failed to fetch leaderboard:', error)
             setError('Failed to load leaderboard')
@@ -77,7 +78,7 @@ function Leaderboard() {
                             <span className="rank">#{index + 1}</span>
                             <span className="username">{entry.username}</span>
                             <span className="stats">
-                                {entry.games_completed} games • {entry.best_score} pts
+                                {entry.gamesPlayed} games • {entry.bestScore} pts
                             </span>
                         </div>
                     ))

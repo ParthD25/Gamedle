@@ -6,12 +6,18 @@
     color: black;
     z-index: 50;
     position:absolute;
-    margin-top: 2.5rem;
+    top: 52px; /* just below input row */
+    left: 0;
+    right: 0;
+    max-height: 240px;
+    overflow-y: auto;
+    border: 1px solid #00000020;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 .listItem{
     padding: .3rem;
     margin: 0px;
-    border: 1px solid black;
+    border-bottom: 1px solid #00000010;
     font-size: large;
     background-color: white;
     

@@ -24,8 +24,11 @@ function LoginPage(){
         setError(null)
         try {
             const { token, user } = await login(emailAndPassword.email, emailAndPassword.password)
-            const info = user ?? { email: emailAndPassword.email }
-            authLogin(token, { email: info.email, username: info.username })
+            const info = {
+                email: user.email || emailAndPassword.email,
+                username: user.displayName || undefined
+            }
+            authLogin(token, info)
             navigate('/')
         } catch (err) {
             if (err instanceof Error) setError(err.message)
