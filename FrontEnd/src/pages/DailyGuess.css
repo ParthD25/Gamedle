@@ -25,9 +25,11 @@
 }
 .infoForUser{
     font-weight: bold;
+    color: white;
 }
 .guesses{
     justify-self: flex-start;
+    color: white;
 }
 .gameOverMessage{
     position: fixed;

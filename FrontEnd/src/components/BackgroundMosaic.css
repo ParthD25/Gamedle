@@ -1,0 +1,41 @@
+.bgm-root {
+  position: fixed;
+  inset: 0;
+  z-index: -1; /* behind app content */
+  pointer-events: none; /* ignore mouse */
+}
+
+.bgm-grid {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.bgm-cell {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: brightness(0.7);
+}
+
+.bgm-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+}
+
+.bgm-fallback {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1200px 800px at 10% -10%, rgba(100,108,255,0.15), transparent 60%),radial-gradient(1100px 600px at 110% 10%, rgba(80,227,194,0.12), transparent 60%),linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.9));
+}
+
+@media (max-width: 768px) {
+  .bgm-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 22vh;
+  }
+}
