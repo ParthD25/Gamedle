@@ -6,24 +6,28 @@
 }
 
 .guesses-table{
-    border: 2px solid gray;
+    border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 5px;
     padding: .5rem;
     border-collapse: collapse;
     table-layout: auto;
     width: 100%;
     font-size: 14px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
 }
 
 .guesses-label{
-    border-bottom: 1px solid grey;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     padding: 8px;
     text-align: left;
     font-weight: bold;
+    color: white;
 }
 
 .noGuess-data{
     font-style: italic;
+    color: white;
 }
 
 .gameGuess-data{
@@ -33,6 +37,7 @@
     overflow-wrap: break-word;
     max-width: none;
     white-space: normal;
+    color: white;
 }
 
 .guessedGameRow{
@@ -44,5 +49,6 @@
     padding: 8px;
     text-align: left;
     vertical-align: top;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
 }
