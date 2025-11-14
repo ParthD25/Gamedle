@@ -177,7 +177,7 @@ export const searchForFive = (req, res) => {
         WHERE g.name LIKE ?
         GROUP BY g.id, g.name, g.release_date, g.rating
         LIMIT 5;
-    `, [`%${title}%`], (err, rows) => {
+    `, [`${title}%`], (err, rows) => {
         console.log('Searching for:', title);
 
         if (err) {
