@@ -51,13 +51,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                     setIsAuthenticated(true);
                     setUserInfo(JSON.parse(savedUserInfo));
                 }
-                const userData = await getCurrentUser(token);
-                if (userData) {
-                    const { email, username } = userData;
-                    setIsAuthenticated(true);
-                    setUserInfo({ email, username });
-                    localStorage.setItem('userInfo', JSON.stringify({ email, username }));
-                }
+                const { email, username } = await getCurrentUser(token);
+                setIsAuthenticated(true);
+                setUserInfo({ email, username });
+                localStorage.setItem('userInfo', JSON.stringify({ email, username }));
             } catch (e) {
                 // Token invalid/expired: clear storage
                 localStorage.removeItem('token');

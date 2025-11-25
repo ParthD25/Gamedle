@@ -1,158 +1,131 @@
 import { type ApiGame } from "../src/models/Game"
-import { auth } from "../src/firebase"
-import {
-  loginUser,
-  registerUser,
-  logoutUser,
-  getRandomGame as firebaseGetRandomGame,
-  searchGames,
-  submitScore as firebaseSubmitScore,
-  getLeaderboard as firebaseGetLeaderboard,
-  updateUsername as firebaseUpdateUsername
-} from "../src/firebaseServices"
+import Game from "../src/models/Game"
+const BASE = 'http://localhost:3000'
+const API = `${BASE}/api/users`
+const GAME_API = `${BASE}/api/game`
 
-// Authentication functions
-export const register = async (email: string, username: string, password: string) => {
-  try {
-    const result = await registerUser(email, username, password);
-    return { token: result.token, user: result.user };
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
-};
 
-export const login = async (email: string, password: string) => {
-  try {
-    const result = await loginUser(email, password);
-    return { token: result.token, user: result.user };
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
-};
 
-export const logout = async () => {
-  try {
-    await logoutUser();
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
-};
-
-function toApiGame(raw: any): ApiGame {
-  const idNum = typeof raw.id === 'string' ? parseInt(raw.id, 10) : Number(raw.id);
-  const genresArr: any[] = Array.isArray(raw.genres)
-    ? raw.genres.map((name: string, idx: number) => ({ id: idx, name }))
-    : [];
-  const companiesArr: any[] = Array.isArray(raw.involved_companies)
-    ? raw.involved_companies.map((name: string, idx: number) => ({ id: idx, company: { id: idx, name } }))
-    : [];
-  const firstRelease = typeof raw.first_release_date === 'number'
-    ? raw.first_release_date
-    : (typeof raw.release_date === 'number' ? raw.release_date : undefined);
-  const rating = typeof raw.rating === 'number' ? raw.rating : undefined;
-
-  return {
-    id: Number.isFinite(idNum) ? idNum : 0,
-    name: raw.name,
-    first_release_date: firstRelease,
-    rating,
-    genres: genresArr,
-    involved_companies: companiesArr
-  };
-}
-
-// Game functions
 export const requestGameDataWithTitle = async (gameTitle: string): Promise<ApiGame | undefined> => {
-  try {
-    const games = await searchGames(gameTitle, 1);
-    if (games.length > 0) {
-      const game = games[0] as any;
-      return toApiGame(game);
+    const URL = `${GAME_API}/lookUpByTitle`
+    const bodyData = { title: gameTitle }
+    const response = await fetch(URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bodyData)
+    })
+    if (!response.ok) throw new Error('Failed to fetch game data')
+    return response.json()
+}
+
+export async function register(email: string, username: string, password: string) {
+    const res = await fetch(`${API}/signUpUser`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, username, password })
+    })
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.error || 'Registration failed')
     }
-    return undefined;
-  } catch (error) {
-    console.error('Error fetching game data:', error);
-    return undefined;
-  }
-};
-
-export async function getRandomGame() {
-  try {
-    const game = await firebaseGetRandomGame() as any;
-    return toApiGame(game);
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+    return res.json() // { token, user }
 }
 
-export async function getFiveSuggestions(input: string): Promise<string[]> {
-  try {
-    console.log('[getFiveSuggestions] Input:', input);
-    const games = await searchGames(input, 5);
-    console.log('[getFiveSuggestions] Raw games:', games);
-    const titles = games.map((game: any) => game.name);
-    console.log('[getFiveSuggestions] Titles:', titles);
-    return titles;
-  } catch (error) {
-    console.error('Error getting suggestions:', error);
-    return [];
-  }
+// Login
+export async function login(email: string, password: string) {
+    const res = await fetch(`${API}/loginUser`, {
+        method: "PUT",
+        headers: { 
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+    })
+
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}))
+        throw new Error(errorData.error || 'Invalid login')
+    }
+    return res.json() // { token, user }
 }
 
-// Leaderboard functions
-export async function submitScore(gameId: string, score: number, guessesUsed: number) {
-  try {
-    const user = auth.currentUser;
-    if (!user) throw new Error('User not authenticated');
+// Find user
+export async function getUser(email: string) {
+    const res = await fetch(`${API}/user`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+    })
 
-    await firebaseSubmitScore(user.uid, gameId, score, guessesUsed);
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+    if (!res.ok) throw new Error("User not found")
+    return res.json()
+}
+// Sources:
+// - MDN Web Docs. “fetch() — Web APIs; Response.ok; Response.json().” Accessed 23 Oct. 2025.
+// - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted by the author for correctness.
+// Accessed 23 Oct. 2025.
+export async function getCurrentUser(token: string) {
+    const res = await fetch(`${API}/me`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.error || 'Failed to get current user')
+    }
+    return res.json() as Promise<{ id: number; email: string; username?: string }>
+}
+// Sources:
+// - MDN Web Docs. “fetch() — method, headers, body; handling JSON.” Accessed 23 Oct. 2025.
+// - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted by the author for correctness.
+// Accessed 23 Oct. 2025.
+export async function updateUsername(token: string, username: string) {
+    const res = await fetch(`${API}/username`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ username })
+    })
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.error || 'Failed to update username')
+    }
+    return res.json() as Promise<{ success: boolean; token: string; user: { id: number; email: string; username: string } }>
 }
 
-export async function getLeaderboard() {
-  try {
-    return await firebaseGetLeaderboard();
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+
+
+
+
+// Methods for Game API
+export async function getRandomGame(){
+    const res = await fetch(`${GAME_API}/getRandomGame`,{
+        method: "GET",
+        headers: { "Content-Type": "application/json"}
+    })
+    if (!res.ok) throw new Error('Unable to get random game')
+    return res.json()
 }
 
-// User functions - simplified for Firebase
-export async function getUser(_email: string) {
-  // Firebase handles users differently - this may not be needed
-  return null;
-}
-
-export async function getCurrentUser(_token: string) {
-  // Use Firebase auth current user
-  const user = auth.currentUser;
-  if (user) {
-    return {
-      email: user.email || '',
-      username: user.displayName || undefined
-    };
-  }
-  return null;
-}
-
-export async function updateUsername(_token: string, username: string) {
-  try {
-    const user = auth.currentUser;
-    if (!user) throw new Error('User not authenticated');
-
-    await firebaseUpdateUsername(user.uid, username);
-
-    // Return expected format for ProfilePage
-    return {
-      token: await user.getIdToken(),
-      user: {
-        email: user.email || '',
-        username: username
-      }
-    };
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+export async function getFiveSuggestions(input: string): Promise<string[]>{
+    const res = await fetch(`${GAME_API}/receiveFiveSuggestions`,{
+        method: "POST",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify({title: input})
+    })
+    if(!res.ok) throw new Error("Unable to get 5 suggestions")
+    const data = await res.json()
+    const gamesArray = data.map((gameData: ApiGame)=>{
+        return new Game(gameData)
+    })
+    const titleArray = gamesArray.map((game: Game)=>{
+        return game.getTitle()
+    })
+    return titleArray
 }

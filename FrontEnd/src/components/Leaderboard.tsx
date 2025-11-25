@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import './Leaderboard.css'
-import { getLeaderboard as fetchLeaderboardData } from '../../utils/apiFunctions'
 
 interface LeaderboardEntry {
-    username?: string
-    gamesPlayed: number
-    bestScore: number
+    username: string
+    games_completed: number
+    avg_guesses: number
+    best_score: number
 }
 
 function Leaderboard() {
@@ -21,13 +21,11 @@ function Leaderboard() {
 
     const fetchLeaderboard = async () => {
         try {
-            const data = await fetchLeaderboardData()
-            const mapped: LeaderboardEntry[] = data.map((u: any) => ({
-                username: u.username || u.email?.split('@')[0],
-                gamesPlayed: u.gamesPlayed || 0,
-                bestScore: u.bestScore || 0
-            }))
-            setLeaderboard(mapped)
+            const response = await fetch('http://localhost:3000/api/leaderboard')
+            if (response.ok) {
+                const data = await response.json()
+                setLeaderboard(data)
+            }
         } catch (error) {
             console.error('Failed to fetch leaderboard:', error)
         } finally {
@@ -49,7 +47,7 @@ function Leaderboard() {
                             <span className="rank">#{index + 1}</span>
                             <span className="username">{entry.username}</span>
                             <span className="stats">
-                                {entry.gamesPlayed} games • {entry.bestScore} pts
+                                {entry.games_completed} games • {entry.best_score} pts
                             </span>
                         </div>
                     ))

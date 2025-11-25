@@ -33,12 +33,8 @@ function SignUpPage(){
         try {
             const response = await register(credentials.email, credentials.username, credentials.password1);
             if (response && response.token) {
-                const user = response.user;
-                const userInfo = {
-                    email: user.email || credentials.email,
-                    username: user.displayName || credentials.username
-                };
-                authLogin(response.token, userInfo);
+                const user = response.user ?? { email: credentials.email, username: credentials.username }
+                authLogin(response.token, { email: user.email, username: user.username });
                 navigate('/');
             } else {
                 setError('Registration failed');
