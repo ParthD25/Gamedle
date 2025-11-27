@@ -6,7 +6,8 @@ import {
     updatePassword,
     deleteUserByEmail,
     getCurrentUser,
-    updateUsername
+    updateUsername,
+    getUserScore
 } from "../Controller/userController.js"
 
 const router = Router()
@@ -32,5 +33,8 @@ router.put('/updatePassword', updatePassword)
 
 //DELETE /api/users/deleteUser - Delete the user's profile
 router.delete('/deleteUser', deleteUserByEmail)
+
+//GET /api/users/:username/score - Get user score by username
+router.get('/users/:username', getUserScore)
 
 export default router

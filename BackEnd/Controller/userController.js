@@ -125,3 +125,36 @@ export const updateUsername = (req, res) => {
         return res.status(401).json({ error: "Invalid or expired token" })
     }
 }
+
+// Sources:
+// - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted by the author for correctness.
+// Accessed 26 Nov. 2025.
+async function getUserScore(req, res) {
+  try {
+    const { username } = req.params;
+    if (!username || username.trim().length < 2) {
+      return res.status(400).json({ error: 'Username required' });
+    }
+
+    const user = await DB.get(
+      'SELECT id, username FROM users WHERE LOWER(username) = LOWER(?) LIMIT 1',
+      [username.trim()]
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Pick the best score recorded for this user
+    const best = await DB.get(
+      'SELECT MAX(score) AS score FROM leaderboard WHERE userId = ?',
+      [user.id]
+    );
+
+    const score = best?.score ?? 0;
+    return res.json({ username: user.username, score });
+  } catch (err) {
+    console.error('getUserScore:', err);
+    return res.status(500).json({ error: 'Server error' });
+  }
+}
