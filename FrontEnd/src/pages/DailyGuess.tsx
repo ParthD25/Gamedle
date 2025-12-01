@@ -24,6 +24,7 @@ function DailyGuess(){
     const [lookupMessage, setLookupMessage] = useState<string | null>(null);
     const MAXIMUM_NUMBER_OF_GUESSES = 20
 
+    console.log("TARGETGAME: ", targetGame?.getTitle())
     //Get the Target Game from API
     useEffect(()=>{
 
@@ -165,6 +166,8 @@ function DailyGuess(){
         }
     };
 
+    const hintAndRules = "How to play: Type in the title of a video game, select a title from the provided list, then click submit. In the title section, an arrow will indicate if you need to guess higher or lower."
+
     return(
         <div className='dailyGuess-wrapper'>
             <div className='main-content'>
@@ -177,6 +180,10 @@ function DailyGuess(){
                 games = {guessedGames}
                 target = {targetGame}
                 />
+                <div className='rules'>
+                    <p className="howToPlay">{hintAndRules}</p>
+                </div>
+                
             </div>
 
             {/* <div style={{ marginTop: 16 }}>

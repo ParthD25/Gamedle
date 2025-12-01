@@ -51,3 +51,14 @@
 .errorMessage{
     color:red;
 }
+.rules{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+.howToPlay{
+    font-weight: normal;
+    max-width: 20rem;
+}

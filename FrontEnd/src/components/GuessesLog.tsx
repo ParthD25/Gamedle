@@ -36,16 +36,9 @@ function GuessesLog({ games, target }: GuessesLogProps){
 
         return (
             <div className="title-letter-highlight">
-                {/* Correct letters in green */}t
                 {correctPart && <span className="correct">{correctPart}</span>}
-
-                {/* First mismatch in yellow */}
                 {firstDiff && <span className="diff">{firstDiff}</span>}
-
-                {/* Remaining letters in white */}
                 {rest && <span className="rest">{rest}</span>}
-
-                {/* Arrow indicator */}
                 <span className="arrow">{arrow}</span>
             </div>
         );
@@ -70,7 +63,6 @@ function GuessesLog({ games, target }: GuessesLogProps){
 
     const GuessedGamesTableElements = (games: Game[], target:Game):ReactElement[]=>{
         const elements = games.map((item)=>{
-            // Helper function to get arrow for string comparison (like old code style)
             const upOrDownArrow = (guessed: string[], target: string[]):string=>{
                 let arrowSymbol = ""
                 if (!guessed || !target || guessed.length === 0 || target.length === 0){
