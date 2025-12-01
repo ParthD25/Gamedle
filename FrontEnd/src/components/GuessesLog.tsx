@@ -68,10 +68,18 @@ function GuessesLog({ games, target }: GuessesLogProps){
                 if (!guessed || !target || guessed.length === 0 || target.length === 0){
                     return ''
                 }
-
+                
                 // Compare first items alphabetically 
-                const guessedFirst = guessed[0].toLowerCase()
-                const targetFirst = target[0].toLowerCase()
+                let guessedFirst = guessed[0]
+                let targetFirst = target[0]
+
+                if(typeof guessedFirst !== 'string' && typeof targetFirst !== 'string'){
+                    return arrowSymbol
+                }
+
+                guessedFirst = guessedFirst.toLowerCase()
+                targetFirst = targetFirst.toLowerCase()
+                
 
                 if(guessedFirst > targetFirst){
                     arrowSymbol = "↓"  // Too high 

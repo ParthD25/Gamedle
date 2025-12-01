@@ -132,27 +132,31 @@ export const updateUsername = (req, res) => {
 export async function getUserScore(req, res) {
   try {
     const { username } = req.params;
+
     if (!username || username.trim().length < 2) {
       return res.status(400).json({ error: 'Username required' });
     }
 
-    const user = await DB.get(
+    const trimmed = username.trim()
+
+    const user = DB.get(
       'SELECT id, username FROM users WHERE LOWER(username) = LOWER(?) LIMIT 1',
-      [username.trim()]
+      [trimmed], (err,user)=>{
+        if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Pick the best score recorded for this user
+        const best =  DB.get(
+        'SELECT MAX(score) AS score FROM scores WHERE user_id = ?',
+        [user.id],(err2, best)=>{
+            
+            const score = best?.score ?? 0;
+            return res.json({ username: user.username, score });
+        });
+
+      }
     );
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    // Pick the best score recorded for this user
-    const best = await DB.get(
-      'SELECT MAX(score) AS score FROM leaderboard WHERE userId = ?',
-      [user.id]
-    );
-
-    const score = best?.score ?? 0;
-    return res.json({ username: user.username, score });
   } catch (err) {
     console.error('getUserScore:', err);
     return res.status(500).json({ error: 'Server error' });

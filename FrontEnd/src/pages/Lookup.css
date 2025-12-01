@@ -1,0 +1,12 @@
+.lookup-wrapper{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid grey;
+    padding: 1rem;  
+    border-radius: 5px;
+    min-width: 40rem;
+    min-height: 30rem;
+    background-color: black;
+}
