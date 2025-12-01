@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 //Helper functions
 import { requestGameDataWithTitle } from '../../utils/apiFunctions.ts'
 import { getRandomGame } from '../../utils/apiFunctions.ts'
@@ -23,6 +23,9 @@ function DailyGuess(){
     const [lookupLoading, setLookupLoading] = useState(false);
     const [lookupMessage, setLookupMessage] = useState<string | null>(null);
     const MAXIMUM_NUMBER_OF_GUESSES = 20
+    //music
+    const audioRef = useRef<HTMLAudioElement | null>(null)
+    const [isMusicPlaying, setIsMusicPlaying] = useState<boolean>(false)
 
     console.log("TARGETGAME: ", targetGame?.getTitle())
     //Get the Target Game from API
@@ -40,6 +43,38 @@ function DailyGuess(){
         }
         fetchData()
     },[])
+
+
+    // Setup background music
+    useEffect(() => {
+        audioRef.current = new Audio('../../public/music.mp3')
+        audioRef.current.loop = true
+        audioRef.current.volume = 0.1
+
+        return () => {
+            // Cleanup when leaving the page
+            if (audioRef.current) {
+                audioRef.current.pause()
+                audioRef.current = null
+            }
+        }
+    }, [])
+
+    const handleToggleMusic = async () => {
+        if (!audioRef.current) return
+
+        try {
+            if (isMusicPlaying) {
+                audioRef.current.pause()
+                setIsMusicPlaying(false)
+            } else {
+                await audioRef.current.play()
+                setIsMusicPlaying(true)
+            }
+        } catch (err) {
+            console.error('Failed to toggle music:', err)
+        }
+    }
 
     async function handleSubmitGuess(title:string){
         //if current guess is already picked, show error message
@@ -171,6 +206,12 @@ function DailyGuess(){
     return(
         <div className='dailyGuess-wrapper'>
             <div className='main-content'>
+                <button
+                    type="button"
+                    onClick={handleToggleMusic}
+                >
+                    {isMusicPlaying ? 'Pause Music' : 'Play Music'}
+                </button>
                 {isGameOver && gameOverElement}
                 {isGameInProgress && guessCounterElement}
                 {!isGameInProgress && infoForUserElement}
