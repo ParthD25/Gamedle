@@ -129,7 +129,7 @@ export const updateUsername = (req, res) => {
 // Sources:
 // - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted by the author for correctness.
 // Accessed 26 Nov. 2025.
-async function getUserScore(req, res) {
+export async function getUserScore(req, res) {
   try {
     const { username } = req.params;
     if (!username || username.trim().length < 2) {
