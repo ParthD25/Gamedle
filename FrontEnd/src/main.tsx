@@ -12,6 +12,7 @@ import LoginPage from './pages/LoginPage.tsx'
 import SignUpPage from './pages/SignUpPage.tsx'
 import ForgotPassword from './pages/ForgotPassword.tsx'
 import ProfilePage from './pages/ProfilePage.tsx'
+import Leaderboard from './components/Leaderboard.tsx'
 
 
 createRoot(document.getElementById('root')!).render(
@@ -24,6 +25,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path='DailyGuess' element={<ProtectedRoute><DailyGuess/></ProtectedRoute>} />
             <Route path='login' element={<LoginPage/>} />
             <Route path='signup' element={<SignUpPage/>} />
+            <Route path='/Leaderboard' element={<Leaderboard/>} />
             <Route path='forgotPassword' element={<ForgotPassword/>} />
             <Route path='profile' element={<ProtectedRoute><ProfilePage/></ProtectedRoute>} />
           </Route>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { updateUsername } from '../../utils/apiFunctions'
+import "./ProfilePage.css"
 
 export default function ProfilePage() {
   const { userInfo, login } = useAuth()
@@ -37,9 +38,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <div style={{ maxWidth: 420, width: '100%' }}>
+    <div className='profile-wrapper' >
       <h2>Profile</h2>
-      <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <form onSubmit={onSubmit} className='profile-form' >
         <label>
           Username
           <input

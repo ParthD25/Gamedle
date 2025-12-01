@@ -136,9 +136,9 @@ function DailyGuess(){
     }
 
     // Sources:
-// - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted by the author for correctness.
-// Accessed 26 Nov. 2025.
-const handleLookup = async () => {
+    // - AI assistance: Portions drafted with OpenAI ChatGPT (GPT-5 Thinking), verified and adapted by the author for correctness.
+    // Accessed 26 Nov. 2025.
+    const handleLookup = async () => {
         const username = lookupUsername.trim();
         if (!username) {
           setLookupMessage('Enter a username.');
@@ -163,7 +163,7 @@ const handleLookup = async () => {
         } finally {
           setLookupLoading(false);
         }
-      };
+    };
 
     return(
         <div className='dailyGuess-wrapper'>
@@ -178,34 +178,32 @@ const handleLookup = async () => {
                 target = {targetGame}
                 />
             </div>
-            <div className='sidebar'>
-                <Leaderboard />
-            </div>
-            <div style={{ marginTop: 16 }}>
-  <details style={{ marginTop: 8 }}>
-    <summary style={{ cursor: 'pointer', fontSize: '0.9rem' }}>Lookup user score</summary>
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8, fontSize: '0.9rem' }}>
-      <input
-        value={lookupUsername}
-        onChange={(e) => setLookupUsername(e.target.value)}
-        placeholder="Username"
-        style={{ width: 180, padding: '4px 6px', fontSize: '0.9rem' }}
-      />
-      <button
-        onClick={handleLookup}
-        disabled={lookupLoading}
-        style={{ padding: '4px 8px', fontSize: '0.85rem' }}
-      >
-        {lookupLoading ? '...' : 'Lookup'}
-      </button>
-    </div>
-    {lookupMessage && (
-      <div style={{ marginTop: 6, fontSize: '0.85rem', opacity: 0.9 }}>
-        {lookupMessage}
-      </div>
-    )}
-  </details>
-</div>
+
+            {/* <div style={{ marginTop: 16 }}>
+                <details style={{ marginTop: 8 }}>
+                <summary style={{ cursor: 'pointer', fontSize: '0.9rem' }}>Lookup user score</summary>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8, fontSize: '0.9rem' }}>
+                    <input
+                        value={lookupUsername}
+                        onChange={(e) => setLookupUsername(e.target.value)}
+                        placeholder="Username"
+                        style={{ width: 180, padding: '4px 6px', fontSize: '0.9rem' }}
+                    />
+                    <button
+                        onClick={handleLookup}
+                        disabled={lookupLoading}
+                        style={{ padding: '4px 8px', fontSize: '0.85rem' }}
+                    >
+                        {lookupLoading ? '...' : 'Lookup'}
+                    </button>
+                </div>
+                {lookupMessage && (
+                    <div style={{ marginTop: 6, fontSize: '0.85rem', opacity: 0.9 }}>
+                        {lookupMessage}
+                    </div>
+                )}
+                </details>
+            </div> */}
         </div>
     )
 }

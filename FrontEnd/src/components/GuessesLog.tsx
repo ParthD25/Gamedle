@@ -8,6 +8,49 @@ interface GuessesLogProps{
 }
 
 function GuessesLog({ games, target }: GuessesLogProps){
+
+    const highlightCorrectLetters = (gameTitle:string, targetTitle:string): ReactElement=>{
+        const guess = gameTitle
+        const target = targetTitle
+
+        let splitIndex = 0;
+
+        const len = Math.min(guess.length, target.length);
+        for (let i = 0; i < len; i++) {
+            if (guess[i].toLowerCase() !== target[i].toLowerCase()) {
+                splitIndex = i;
+                break;
+            }
+            if (i === len - 1) splitIndex = len;
+        }
+
+        const correctPart = guess.slice(0, splitIndex);
+        const firstDiff = guess[splitIndex] ?? "";
+        const rest = guess.slice(splitIndex + 1);
+
+        let arrow = "";
+        const g = guess.toLowerCase();
+        const t = target.toLowerCase();
+        if (g < t) arrow = "↑";      
+        else if (g > t) arrow = "↓"; 
+
+        return (
+            <div className="title-letter-highlight">
+                {/* Correct letters in green */}t
+                {correctPart && <span className="correct">{correctPart}</span>}
+
+                {/* First mismatch in yellow */}
+                {firstDiff && <span className="diff">{firstDiff}</span>}
+
+                {/* Remaining letters in white */}
+                {rest && <span className="rest">{rest}</span>}
+
+                {/* Arrow indicator */}
+                <span className="arrow">{arrow}</span>
+            </div>
+        );
+
+    }
     
 
     //Generates the html elements for all guessed games
@@ -46,20 +89,20 @@ function GuessesLog({ games, target }: GuessesLogProps){
 
                 return arrowSymbol
             }
-
+        
             return(
                 <tr className='guessedGameRow' key={item.getId()}>
-                    <td className='gameGuess-data'>{item.getTitle()}</td>
+                    <td className='gameGuess-data'>{highlightCorrectLetters(item.getTitle(),target.getTitle())}</td>
                     <td className='gameGuess-data'>{item.getYear()}</td>
                     <td className='gameGuess-data'>{Array.isArray(item.getGenres()) ? item.getGenres().join(', ') : item.getGenres()}</td>
                     <td className='gameGuess-data'>
                         {Array.isArray(item.getCompanies()) ? item.getCompanies().join(', ') : item.getCompanies()}
                         {upOrDownArrow(item.getCompanies(), target.getCompanies())}
                     </td>
-                    <td className='gameGuess-data'>
+                    {/* <td className='gameGuess-data'>
                         {Array.isArray(item.getPlatforms()) ? item.getPlatforms().join(', ') : item.getPlatforms()}
                         {upOrDownArrow(item.getPlatforms(), target.getPlatforms())}
-                    </td>
+                    </td> */}
                     <td className='gameGuess-data'>{item.getRating()}</td>
                 </tr>
             )
@@ -81,7 +124,7 @@ function GuessesLog({ games, target }: GuessesLogProps){
                         <th className='guesses-label'>Year</th>
                         <th className='guesses-label'>Genre</th>
                         <th className='guesses-label'>Companies</th>
-                        <th className='guesses-label'>Platforms</th>
+                        {/* <th className='guesses-label'>Platforms</th> */}
                         <th className='guesses-label'>Rating</th>
                     </tr>
                 </thead>

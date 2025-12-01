@@ -52,3 +52,22 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
 }
+
+.title-letter-highlight {
+  display: inline-block;
+  font-weight: 500;
+}
+
+.title-letter-highlight .correct {
+  color: green;
+  font-weight: 700;
+}
+
+.title-letter-highlight .diff {
+  color: yellow;
+  font-weight: 700;
+}
+
+.title-letter-highlight .rest {
+  color: white;
+}
